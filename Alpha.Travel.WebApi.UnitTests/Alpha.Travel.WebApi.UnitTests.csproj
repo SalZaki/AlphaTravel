@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Alpha.Travel.Application\Alpha.Travel.Application.csproj" />
+    <ProjectReference Include="..\Alpha.Travel.WebApi\Alpha.Travel.WebApi.csproj" />
   </ItemGroup>
 
 </Project>
