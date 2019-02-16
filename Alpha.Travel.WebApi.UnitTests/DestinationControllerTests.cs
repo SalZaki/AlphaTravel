@@ -32,7 +32,7 @@
         }
 
         [Test]
-        public async Task VerifyCanGetTravelProfile()
+        public async Task Can_Get_DestinationBy_Id()
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
