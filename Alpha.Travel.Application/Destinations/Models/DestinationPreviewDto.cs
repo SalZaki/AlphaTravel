@@ -1,4 +1,4 @@
-﻿namespace Alpha.Travel.Application.Categories.Models
+﻿namespace Alpha.Travel.Application.Destinations.Models
 {
     using System;
     using System.Linq.Expressions;

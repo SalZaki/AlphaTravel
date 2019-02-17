@@ -2,9 +2,9 @@
 {
     using MediatR;
     using Destinations.Models;
+    using System.Collections.Generic;
 
-    public class GetDestinationPreviewQuery : IRequest<DestinationPreviewDto>
+    public class GetDestinationsPreviewQuery : IRequest<List<DestinationPreviewDto>>
     {
-        public int Id { get; set; }
     }
 }

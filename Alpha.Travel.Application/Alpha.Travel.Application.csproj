@@ -12,10 +12,12 @@
 
   <ItemGroup>
     <PackageReference Include="MediatR" Version="6.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Alpha.Travel.Domain\Alpha.Travel.Domain.csproj" />
+    <ProjectReference Include="..\Alpha.Travel.Persistence\Alpha.Travel.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

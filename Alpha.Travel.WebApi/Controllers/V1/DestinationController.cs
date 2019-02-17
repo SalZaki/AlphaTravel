@@ -2,12 +2,13 @@
 {
     using System.Threading;
     using System.Threading.Tasks;
+    using System.Collections.Generic;
 
     using MediatR;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
-    using Application.Categories.Models;
+    using Application.Destinations.Models;
     using Application.Destinations.Queries;
 
     [ApiVersion("1.0")]
@@ -22,7 +23,6 @@
             _mediator = mediator;
         }
 
-        [HttpGet]
         [HttpGet("{destinationId:int}", Name = nameof(GetByIdAsync))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DestinationPreviewDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -38,7 +38,28 @@
 
             if (result == null)
             {
-                return new NotFoundObjectResult("The destination you were requesting could not be found");
+                return new NotFoundObjectResult($"The destination with id {query.Id} you were requesting could not be found");
+            }
+
+            return Ok(result);
+        }
+
+        [HttpGet("GetAllAsync", Name = nameof(GetByIdAsync))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<DestinationPreviewDto>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetAllAsync([FromQuery] GetDestinationsPreviewQuery query, CancellationToken ct)
+        {
+            if (query == null)
+            {
+                return BadRequest();
+            }
+
+            var result = await _mediator.Send(query, ct);
+
+            if (result == null)
+            {
+                return NotFound();
             }
 
             return Ok(result);
