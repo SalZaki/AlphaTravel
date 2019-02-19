@@ -1,13 +1,15 @@
-﻿namespace Alpha.Travel.Application.Destinations.Queries
+﻿namespace Alpha.Travel.Application.Destinations.QueryHandlers
 {
-    using Destinations.Models;
-    using Persistence;
-    using MediatR;
-    using Microsoft.EntityFrameworkCore;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+    using System.Collections.Generic;
+
+    using MediatR;
+    using Microsoft.EntityFrameworkCore;
+    using Models;
+    using Persistence;
+    using Queries;
 
     public class GetDestinationsPreviewQueryHandler : IRequestHandler<GetDestinationsPreviewQuery, List<DestinationPreviewDto>>
     {

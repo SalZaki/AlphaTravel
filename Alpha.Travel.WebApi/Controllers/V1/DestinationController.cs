@@ -23,57 +23,49 @@
             _mediator = mediator;
         }
 
-        [HttpGet("{destinationId:int}", Name = nameof(GetByIdAsync))]
+        [HttpGet("{id:int}", Name = nameof(GetByIdAsync))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DestinationPreviewDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetByIdAsync([FromQuery] GetDestinationPreviewQuery query, CancellationToken ct)
+        public async Task<IActionResult> GetByIdAsync([FromQuery] int id, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (query == null || query.Id <= 0)
+            if (id <= 0)
             {
                 return BadRequest();
             }
 
-            var result = await _mediator.Send(query, ct);
+            var query = new GetDestinationPreviewQuery { Id = id };
 
-            if (result == null)
+            var response = await _mediator.Send(query, cancellationToken).ConfigureAwait(false);
+
+            if (response == null)
             {
                 return new NotFoundObjectResult($"The destination with id {query.Id} you were requesting could not be found");
             }
 
-            return Ok(result);
+            return Ok(response);
         }
 
-        [HttpGet("GetAllAsync", Name = nameof(GetByIdAsync))]
+        [HttpGet("getall", Name = nameof(GetAllAsync))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<DestinationPreviewDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetAllAsync([FromQuery] GetDestinationsPreviewQuery query, CancellationToken ct)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> GetAllAsync([FromQuery] GetDestinationsPreviewQuery query, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (query == null)
             {
                 return BadRequest();
             }
 
-            var result = await _mediator.Send(query, ct);
+            var response = await _mediator.Send(query, cancellationToken).ConfigureAwait(false);
 
-            if (result == null)
+            if (response == null)
             {
-                return NotFound();
+                return NoContent();
             }
 
-            return Ok(result);
+            return Ok(response);
         }
-
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> Update(string id, [FromBody]UpdateCustomerCommand command)
-        //{
-        //    if (command == null || command.Id != id)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    return Ok(await Mediator.Send(command));
-        //}
     }
 }

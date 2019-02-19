@@ -1,12 +1,17 @@
-﻿namespace Alpha.Travel.Application.Destinations.Queries
+﻿namespace Alpha.Travel.Application.Destinations.QueryHandlers
 {
-    using MediatR;
-    using Destinations.Models;
+    using System;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using Persistence;
-    using System.Linq;
+
+    using FluentValidation;
+    using MediatR;
     using Microsoft.EntityFrameworkCore;
+
+    using Persistence;
+    using Queries;
+    using Models;
 
     public class GetDestinationPreviewQueryHandler : IRequestHandler<GetDestinationPreviewQuery, DestinationPreviewDto>
     {
@@ -14,7 +19,7 @@
 
         public GetDestinationPreviewQueryHandler(AlphaTravelDbContext context)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public Task<DestinationPreviewDto> Handle(GetDestinationPreviewQuery request, CancellationToken cancellationToken)

@@ -6,7 +6,9 @@
     public class AlphaTravelDbContext : DbContext
     {
         public AlphaTravelDbContext(DbContextOptions<AlphaTravelDbContext> options)
-            : base(options) { }
+            : base(options)
+        {
+        }
 
         public DbSet<Destination> Destinations { get; set; }
 
