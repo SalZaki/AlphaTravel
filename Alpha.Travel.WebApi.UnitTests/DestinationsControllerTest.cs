@@ -182,6 +182,7 @@
 
             // Assert
             var response = result.Should().BeOfType<OkObjectResult>().Subject;
+            response.StatusCode.Should().Equals(200);
             var destination = response.Value.Should().BeAssignableTo<DestinationResponse>().Subject;
             destination.Data.Id.Should().Be(1);
             destination.Data.Name.Should().Be("Test");
@@ -235,7 +236,11 @@
             // Assert
             var response = result.Should().BeOfType<OkObjectResult>().Subject;
             response.StatusCode.Should().Equals(200);
-            response.Value.Should().Equals(3);
+
+            var destination = response.Value.Should().BeAssignableTo<PagedDestinationResponse>().Subject;
+            destination.Data.Select(x => x.Id == 1).Should().NotBeNull();
+            destination.Data.Select(x => x.Name == "Test").Should().NotBeNull();
+            destination.Data.Count.Should().Equals(3);
         }
     }
 }
