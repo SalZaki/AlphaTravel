@@ -1,5 +1,7 @@
 ﻿namespace Alpha.Travel.Application.Destinations.Validators
 {
+    using Common.Validators;
+    using Common.Enums;
     using FluentValidation;
     using Queries;
 
@@ -7,9 +9,9 @@
     {
         public GetDestinationPreviewQueryValidator()
         {
-            RuleFor(a => a.Id)
-                .NotEmpty()
-                .WithMessage("Destination id cannot be emplty");
+            RuleFor(x => x.Id)
+                .IsValidIntId()
+                .WithErrorCode(Error.InvalidDestinationId.ToString());
         }
     }
 }

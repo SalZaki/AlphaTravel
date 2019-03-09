@@ -13,6 +13,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Alpha.Travel.Application\Alpha.Travel.Application.csproj" />
+    <ProjectReference Include="..\Alpha.Travel.Common\Alpha.Travel.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Filters\" />
+    <Folder Include="Models\Requests\" />
   </ItemGroup>
 
 </Project>

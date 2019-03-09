@@ -33,13 +33,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alpha.Travel.WebApi", "Alph
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alpha.Travel.WebApi.Host", "Alpha.Travel.WebApi.Host\Alpha.Travel.WebApi.Host.csproj", "{FD00A99C-D54A-45A8-8121-3F23BCF0B62B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alpha.Travel.Application.UnitTests", "Alpha.Travel.Application.UnitTests\Alpha.Travel.Application.UnitTests.csproj", "{772E4862-FCDD-4BE8-A6BF-8A0BD3F516D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alpha.Travel.Application.UnitTests", "Alpha.Travel.Application.UnitTests\Alpha.Travel.Application.UnitTests.csproj", "{772E4862-FCDD-4BE8-A6BF-8A0BD3F516D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alpha.Travel.WebApi.UnitTests", "Alpha.Travel.WebApi.UnitTests\Alpha.Travel.WebApi.UnitTests.csproj", "{94D95D06-8EB6-416F-91E9-830082B7793A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alpha.Travel.WebApi.UnitTests", "Alpha.Travel.WebApi.UnitTests\Alpha.Travel.WebApi.UnitTests.csproj", "{94D95D06-8EB6-416F-91E9-830082B7793A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alpha.Travel.WebApi.ClientSDK", "Alpha.Travel.WebApi.ClientSDK\Alpha.Travel.WebApi.ClientSDK.csproj", "{75569DFA-31AF-4A8A-AC5D-CB1F5B571BFA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alpha.Travel.WebApi.ClientSDK", "Alpha.Travel.WebApi.ClientSDK\Alpha.Travel.WebApi.ClientSDK.csproj", "{75569DFA-31AF-4A8A-AC5D-CB1F5B571BFA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{90C76CC3-DC03-4217-944D-283F91AE9B8A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alpha.Travel.Core", "Alpha.Travel.Core\Alpha.Travel.Core.csproj", "{0C7EFCC4-3A00-4D48-A2CE-369C8C656250}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,6 +93,10 @@ Global
 		{75569DFA-31AF-4A8A-AC5D-CB1F5B571BFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75569DFA-31AF-4A8A-AC5D-CB1F5B571BFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75569DFA-31AF-4A8A-AC5D-CB1F5B571BFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C7EFCC4-3A00-4D48-A2CE-369C8C656250}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C7EFCC4-3A00-4D48-A2CE-369C8C656250}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C7EFCC4-3A00-4D48-A2CE-369C8C656250}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C7EFCC4-3A00-4D48-A2CE-369C8C656250}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -112,6 +118,7 @@ Global
 		{94D95D06-8EB6-416F-91E9-830082B7793A} = {90C76CC3-DC03-4217-944D-283F91AE9B8A}
 		{75569DFA-31AF-4A8A-AC5D-CB1F5B571BFA} = {74AC5027-55D6-41F6-85B8-AA5F3E487091}
 		{90C76CC3-DC03-4217-944D-283F91AE9B8A} = {6EC00851-3D40-4887-82AE-8E6A26FEDD38}
+		{0C7EFCC4-3A00-4D48-A2CE-369C8C656250} = {C7EE5096-4E58-452B-BD29-5A601A9AC0CF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F98F2095-221E-4022-BCC3-113CC09E240F}

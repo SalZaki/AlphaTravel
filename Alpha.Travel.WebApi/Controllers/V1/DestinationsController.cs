@@ -2,7 +2,6 @@
 {
     using System.Threading;
     using System.Threading.Tasks;
-    using System.Collections.Generic;
 
     using MediatR;
     using Microsoft.AspNetCore.Http;
@@ -10,21 +9,22 @@
 
     using Application.Destinations.Models;
     using Application.Destinations.Queries;
+    using Application.Common.Models.Requests;
 
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [Produces("application/xml", "application/json")]
-    public class DestinationController : Controller
+    public class DestinationsController : Controller
     {
         private readonly IMediator _mediator;
 
-        public DestinationController(IMediator mediator)
+        public DestinationsController(IMediator mediator)
         {
             _mediator = mediator;
         }
 
         [HttpGet("{id:int}", Name = nameof(GetByIdAsync))]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DestinationPreviewDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DestinationResponse))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetByIdAsync([FromQuery] int id, CancellationToken cancellationToken = default(CancellationToken))
@@ -35,7 +35,6 @@
             }
 
             var query = new GetDestinationPreviewQuery { Id = id };
-
             var response = await _mediator.Send(query, cancellationToken).ConfigureAwait(false);
 
             if (response == null)
@@ -46,24 +45,25 @@
             return Ok(response);
         }
 
-        [HttpGet("getall", Name = nameof(GetAllAsync))]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<DestinationPreviewDto>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> GetAllAsync([FromQuery] GetDestinationsPreviewQuery query, CancellationToken cancellationToken = default(CancellationToken))
+        [HttpGet(Name = nameof(GetAllAsync))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedDestinationResponse))]
+        // [ProducesResponseType(typeof(JsonErrorResponse), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetAllAsync([FromQuery] PagingOptions pagingOptions, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (query == null)
+            if (pagingOptions == null)
             {
                 return BadRequest();
             }
 
-            var response = await _mediator.Send(query, cancellationToken).ConfigureAwait(false);
-
-            if (response == null)
+            var query = new GetDestinationsPreviewQuery
             {
-                return NoContent();
-            }
+                PageNumber = pagingOptions.PageNumber,
+                PageSize = pagingOptions.PageSize == 0 ? 10 : pagingOptions.PageSize,
+                OrderBy = pagingOptions.OrderBy,
+                Sort = pagingOptions.Sort
+            };
+
+            var response = await _mediator.Send(query, cancellationToken).ConfigureAwait(false);
 
             return Ok(response);
         }

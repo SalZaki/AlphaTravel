@@ -1,4 +1,4 @@
-﻿namespace Alpha.Travel.Domain.Entities
+﻿namespace Alpha.Travel.Domain.Entities.Destination
 {
     public sealed class Destination : BaseEntity
     {

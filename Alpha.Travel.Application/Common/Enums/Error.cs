@@ -19,9 +19,9 @@
         InvalidFirstName,
         InvalidLastName,
         InvalidSubcategoryId,
-        InvalidIdeaId,
+        InvalidDestinationId,
         AccessDenied,
-        InvalidIdeaTitle,
+        InvalidDestinationTitle,
         TooManySubcategories
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Alpha.Travel.Persistence
 {
-    using Domain.Entities;
+    using Domain.Entities.Destination;
     using Microsoft.EntityFrameworkCore;
 
     public class AlphaTravelDbContext : DbContext

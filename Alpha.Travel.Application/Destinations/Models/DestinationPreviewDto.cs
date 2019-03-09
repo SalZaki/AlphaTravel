@@ -2,12 +2,13 @@
 {
     using System;
     using System.Linq.Expressions;
-    using Domain.Entities;
+    using Domain.Entities.Destination;
 
     public class DestinationPreviewDto
     {
         public DestinationPreviewDto()
         {
+
         }
 
         public static Expression<Func<Destination, DestinationPreviewDto>> Projection

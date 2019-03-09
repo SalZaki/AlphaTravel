@@ -13,7 +13,7 @@
     using Queries;
     using Models;
 
-    public class GetDestinationPreviewQueryHandler : IRequestHandler<GetDestinationPreviewQuery, DestinationPreviewDto>
+    public class GetDestinationPreviewQueryHandler : IRequestHandler<GetDestinationPreviewQuery, DestinationResponse>
     {
         private readonly AlphaTravelDbContext _context;
 
@@ -22,9 +22,17 @@
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public Task<DestinationPreviewDto> Handle(GetDestinationPreviewQuery request, CancellationToken cancellationToken)
+        public async Task<DestinationResponse> Handle(GetDestinationPreviewQuery request, CancellationToken cancellationToken)
         {
-            return _context.Destinations.Select(DestinationPreviewDto.Projection).Where(x => x.Id == request.Id).FirstOrDefaultAsync(cancellationToken);
+            var response = new DestinationResponse
+            {
+                Data = await _context.Destinations
+                .Select(DestinationPreviewDto.Projection)
+                .Where(x => x.Id == request.Id)
+                .FirstOrDefaultAsync(cancellationToken)
+            };
+
+            return response;
         }
     }
 }

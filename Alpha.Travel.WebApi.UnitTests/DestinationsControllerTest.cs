@@ -13,19 +13,20 @@
     using Moq;
     using Microsoft.AspNetCore.Mvc;
     using WebApi.Controllers.V1;
+    using Application.Common.Models.Requests;
 
     [TestFixture]
-    public class DestinationControllerTest : BaseTest
+    public class DestinationsControllerTest : BaseTest
     {
         [Test]
-        public void Destination_GetAllAsync_Has_HttpGet_Attribute()
+        public void Destinations_GetAllAsync_Has_HttpGet_Attribute()
         {
             // Arrange
             var mediator = new Mock<IMediator>();
-            var sut = new DestinationController(mediator.Object);
+            var sut = new DestinationsController(mediator.Object);
 
             // Act
-            var attribute = sut.GetAttributesOn(x => x.GetAllAsync(It.IsAny<GetDestinationsPreviewQuery>(), It.IsAny<CancellationToken>())).OfType<HttpGetAttribute>().SingleOrDefault();
+            var attribute = sut.GetAttributesOn(x => x.GetAllAsync(It.IsAny<PagingOptions>(), It.IsAny<CancellationToken>())).OfType<HttpGetAttribute>().SingleOrDefault();
 
             // Assert
             attribute.Should().NotBeNull();
@@ -33,15 +34,15 @@
         }
 
         [Test]
-        public void Destination_GetAllAsync_Has_ProducesResponse_Atttribute_With_200_StatusCode()
+        public void Destinations_GetAllAsync_Has_ProducesResponse_Atttribute_With_200_StatusCode()
         {
             // Arrange
             var mediator = new Mock<IMediator>();
-            var sut = new DestinationController(mediator.Object);
+            var sut = new DestinationsController(mediator.Object);
             var expectedStatusCode = 200;
 
             // Act
-            var attributes = sut.GetAttributesOn(x => x.GetAllAsync(It.IsAny<GetDestinationsPreviewQuery>(), It.IsAny<CancellationToken>())).OfType<ProducesResponseTypeAttribute>();
+            var attributes = sut.GetAttributesOn(x => x.GetAllAsync(It.IsAny<PagingOptions>(), It.IsAny<CancellationToken>())).OfType<ProducesResponseTypeAttribute>();
 
             // Assert
             attributes.Should().NotBeNull();
@@ -50,15 +51,15 @@
         }
 
         [Test]
-        public void Destination_GetAllAsync_Has_ProducesResponse_Atttribute_With_Correct_Return_Type()
+        public void Destinations_GetAllAsync_Has_ProducesResponse_Atttribute_With_Correct_Return_Type()
         {
             // Arrange
             var mediator = new Mock<IMediator>();
-            var sut = new DestinationController(mediator.Object);
+            var sut = new DestinationsController(mediator.Object);
             var expectedTyped = typeof(IEnumerable<DestinationPreviewDto>);
 
             // Act
-            var attributes = sut.GetAttributesOn(x => x.GetAllAsync(It.IsAny<GetDestinationsPreviewQuery>(), It.IsAny<CancellationToken>())).OfType<ProducesResponseTypeAttribute>();
+            var attributes = sut.GetAttributesOn(x => x.GetAllAsync(It.IsAny<PagingOptions>(), It.IsAny<CancellationToken>())).OfType<ProducesResponseTypeAttribute>();
 
             // Assert
             attributes.Should().NotBeNull();
@@ -67,15 +68,15 @@
         }
 
         [Test]
-        public void Destination_GetAllAsync_Has_ProducesResponse_Atttribute_With_204_StatusCode()
+        public void Destinations_GetAllAsync_Has_ProducesResponse_Atttribute_With_204_StatusCode()
         {
             // Arrange
             var mediator = new Mock<IMediator>();
-            var sut = new DestinationController(mediator.Object);
+            var sut = new DestinationsController(mediator.Object);
             var expectedStatusCode = 204;
 
             // Act
-            var attributes = sut.GetAttributesOn(x => x.GetAllAsync(It.IsAny<GetDestinationsPreviewQuery>(), It.IsAny<CancellationToken>())).OfType<ProducesResponseTypeAttribute>();
+            var attributes = sut.GetAttributesOn(x => x.GetAllAsync(It.IsAny<PagingOptions>(), It.IsAny<CancellationToken>())).OfType<ProducesResponseTypeAttribute>();
 
             // Assert
             attributes.Should().NotBeNull();
@@ -84,15 +85,15 @@
         }
 
         [Test]
-        public void Destination_GetAllAsync_Has_ProducesResponse_Atttribute_With_404_StatusCode()
+        public void Destinations_GetAllAsync_Has_ProducesResponse_Atttribute_With_404_StatusCode()
         {
             // Arrange
             var mediator = new Mock<IMediator>();
-            var sut = new DestinationController(mediator.Object);
+            var sut = new DestinationsController(mediator.Object);
             var expectedStatusCode = 404;
 
             // Act
-            var attributes = sut.GetAttributesOn(x => x.GetAllAsync(It.IsAny<GetDestinationsPreviewQuery>(), It.IsAny<CancellationToken>())).OfType<ProducesResponseTypeAttribute>();
+            var attributes = sut.GetAttributesOn(x => x.GetAllAsync(It.IsAny<PagingOptions>(), It.IsAny<CancellationToken>())).OfType<ProducesResponseTypeAttribute>();
 
             // Assert
             attributes.Should().NotBeNull();
@@ -101,15 +102,15 @@
         }
 
         [Test]
-        public void Destination_GetAllAsync_Has_ProducesResponse_Atttribute_With_400_StatusCode()
+        public void Destinations_GetAllAsync_Has_ProducesResponse_Atttribute_With_400_StatusCode()
         {
             // Arrange
             var mediator = new Mock<IMediator>();
-            var sut = new DestinationController(mediator.Object);
+            var sut = new DestinationsController(mediator.Object);
             var expectedStatusCode = 400;
 
             // Act
-            var attributes = sut.GetAttributesOn(x => x.GetAllAsync(It.IsAny<GetDestinationsPreviewQuery>(), It.IsAny<CancellationToken>())).OfType<ProducesResponseTypeAttribute>();
+            var attributes = sut.GetAttributesOn(x => x.GetAllAsync(It.IsAny<PagingOptions>(), It.IsAny<CancellationToken>())).OfType<ProducesResponseTypeAttribute>();
 
             // Assert
             attributes.Should().NotBeNull();
@@ -118,12 +119,12 @@
         }
 
         [Test]
-        public async Task Destination_GetByIdAsync_GetDestinationPreviewQuery_Has_Correct_Data()
+        public async Task Destinations_GetByIdAsync_GetDestinationPreviewQuery_Has_Correct_Data()
         {
             // Arrange
             var mediator = new Mock<IMediator>();
             var destinationId = 1;
-            var sut = new DestinationController(mediator.Object);
+            var sut = new DestinationsController(mediator.Object);
 
             // Act
             await sut.GetByIdAsync(destinationId, default(CancellationToken));
@@ -133,13 +134,13 @@
         }
 
         [Test]
-        public async Task Destination_GetByIdAsync_Returns_OK_200_Result()
+        public async Task Destinations_GetByIdAsync_Returns_OK_200_Result()
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
             mockMediator.Setup(x => x.Send(It.IsAny<GetDestinationPreviewQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Destination);
             var destinationId = 1;
-            var sut = new DestinationController(mockMediator.Object);
+            var sut = new DestinationsController(mockMediator.Object);
 
             // Act
             var result = await sut.GetByIdAsync(destinationId, default(CancellationToken));
@@ -150,13 +151,13 @@
         }
 
         [Test]
-        public async Task Destination_GetByIdAsync_Returns_NotFound_404_Result()
+        public async Task Destinations_GetByIdAsync_Returns_NotFound_404_Result()
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
-            mockMediator.Setup(x => x.Send(It.IsAny<GetDestinationPreviewQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync((DestinationPreviewDto)null).Verifiable();
+            mockMediator.Setup(x => x.Send(It.IsAny<GetDestinationPreviewQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync((DestinationResponse)null).Verifiable();
 
-            var sut = new DestinationController(mockMediator.Object);
+            var sut = new DestinationsController(mockMediator.Object);
             var destinationId = 22;
 
             // Act
@@ -168,12 +169,12 @@
         }
 
         [Test]
-        public async Task Destination_GetByIdAsync_Returns_OK_200_With_Correct_Data()
+        public async Task Destinations_GetByIdAsync_Returns_OK_200_With_Correct_Data()
         {
             // Arranges
             var mockMediator = new Mock<IMediator>();
             mockMediator.Setup(x => x.Send(It.IsAny<GetDestinationPreviewQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Destination);
-            var sut = new DestinationController(mockMediator.Object);
+            var sut = new DestinationsController(mockMediator.Object);
             var destinationId = 1;
 
             // Act
@@ -181,22 +182,22 @@
 
             // Assert
             var response = result.Should().BeOfType<OkObjectResult>().Subject;
-            var destination = response.Value.Should().BeAssignableTo<DestinationPreviewDto>().Subject;
-            destination.Id.Should().Be(1);
-            destination.Name.Should().Be("Test");
+            var destination = response.Value.Should().BeAssignableTo<DestinationResponse>().Subject;
+            destination.Data.Id.Should().Be(1);
+            destination.Data.Name.Should().Be("Test");
         }
 
         [Test]
-        public async Task Destination_GetAllAsync_Returns_OK_200_Result()
+        public async Task Destinations_GetAllAsync_Returns_OK_200_Result()
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
             mockMediator.Setup(x => x.Send(It.IsAny<GetDestinationsPreviewQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Destinations);
-            var sut = new DestinationController(mockMediator.Object);
-            var query = new GetDestinationsPreviewQuery();
+            var sut = new DestinationsController(mockMediator.Object);
+            var pagingOptions = new PagingOptions { PageNumber = 1, PageSize = 10 };
 
             // Act
-            var result = await sut.GetAllAsync(query, default(CancellationToken));
+            var result = await sut.GetAllAsync(pagingOptions, default(CancellationToken));
 
             // Assert
             var response = result.Should().BeOfType<OkObjectResult>().Subject;
@@ -204,18 +205,37 @@
         }
 
         [Test]
-        public async Task Destination_GetAllAsync_GetDestinationPreviewQuery_With_Correct_Data()
+        public async Task Destinations_GetAllAsync_GetDestinationPreviewQuery_Can_Verify()
         {
             // Arrange
-            var query = new GetDestinationsPreviewQuery { };
-            var mediator = new Mock<IMediator>();
-            var sut = new DestinationController(mediator.Object);
+            var mockMediator = new Mock<IMediator>();
+            var sut = new DestinationsController(mockMediator.Object);
+            var pagingOptions = new PagingOptions { PageNumber = 1, PageSize = 10 };
 
             // Act
-            await sut.GetAllAsync(query, default(CancellationToken));
+            await sut.GetAllAsync(pagingOptions, default(CancellationToken));
 
             // Assert
-            mediator.Verify(x => x.Send(It.IsAny<GetDestinationsPreviewQuery>(), It.IsAny<CancellationToken>()));
+            mockMediator.Verify(x => x.Send(It.IsAny<GetDestinationsPreviewQuery>(), It.IsAny<CancellationToken>()));
+        }
+
+        [Test]
+        public async Task Destinations_GetAllAsync_Returns_OK_200_Result_With_Correct_Data()
+        {
+            // Arrange
+            var mockMediator = new Mock<IMediator>();
+            mockMediator.Setup(x => x.Send(It.IsAny<GetDestinationsPreviewQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Destinations);
+
+            var sut = new DestinationsController(mockMediator.Object);
+            var pagingOptions = new PagingOptions { PageNumber = 1, PageSize = 10 };
+
+            // Act
+            var result = await sut.GetAllAsync(pagingOptions, default(CancellationToken));
+
+            // Assert
+            var response = result.Should().BeOfType<OkObjectResult>().Subject;
+            response.StatusCode.Should().Equals(200);
+            response.Value.Should().Equals(3);
         }
     }
 }
