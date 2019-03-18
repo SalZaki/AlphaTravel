@@ -111,7 +111,7 @@
             [FromBody]CreateCustomer command,
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(command, cancellationToken).ConfigureAwait(false);
             return Created(Url.Link(nameof(GetCustomerByIdAsync), new { result.Id }), null);
         }
 
@@ -131,7 +131,7 @@
             CancellationToken cancellationToken = default(CancellationToken))
         {
             var command = new DeleteCustomer { Id = id };
-            await _mediator.Send(command);
+            await _mediator.Send(command, cancellationToken).ConfigureAwait(false);
             return NoContent();
         }
 
@@ -151,7 +151,8 @@
             [FromBody]UpdateCustomer command,
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            await _mediator.Send(command);
+            command.Id = id;
+            await _mediator.Send(command, cancellationToken).ConfigureAwait(false);
             return NoContent();
         }
     }

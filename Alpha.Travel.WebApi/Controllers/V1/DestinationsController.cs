@@ -112,7 +112,7 @@
             [FromBody]CreateDestination command,
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(command, cancellationToken).ConfigureAwait(false);
             return Created(Url.Link(nameof(GetByIdAsync), new { result.Id }), null);
         }
 
@@ -132,7 +132,7 @@
             CancellationToken cancellationToken = default(CancellationToken))
         {
             var command = new DeleteDestination { Id = id };
-            await _mediator.Send(command);
+            await _mediator.Send(command, cancellationToken).ConfigureAwait(false);
             return NoContent();
         }
 
@@ -152,7 +152,8 @@
             [FromBody]UpdateDestination command,
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            await _mediator.Send(command);
+            command.Id = id;
+            await _mediator.Send(command, cancellationToken).ConfigureAwait(false);
             return NoContent();
         }
     }

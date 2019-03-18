@@ -12,6 +12,7 @@
         InvalidFirstName,
         InvalidLastName,
         InvalidDestinationId,
+        InvalidCustomerId,
         AccessDenied,
         InvalidDestinationTitle,
         InvalidPageNumber,

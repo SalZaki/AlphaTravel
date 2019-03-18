@@ -4,6 +4,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.28307.106
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{EAF45256-BE7F-4839-8CED-9D45F6C8A97A}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\Users\administrator.SPDEV\Desktop\Delete Customer.png = ..\..\..\Users\administrator.SPDEV\Desktop\Delete Customer.png
+		..\..\..\Users\administrator.SPDEV\Desktop\Get All Customers with pagging 2.PNG = ..\..\..\Users\administrator.SPDEV\Desktop\Get All Customers with pagging 2.PNG
+		..\..\..\Users\administrator.SPDEV\Desktop\Get All Customers with pagging.PNG = ..\..\..\Users\administrator.SPDEV\Desktop\Get All Customers with pagging.PNG
+		..\..\..\Users\administrator.SPDEV\Desktop\Get All Customers.PNG = ..\..\..\Users\administrator.SPDEV\Desktop\Get All Customers.PNG
+		..\..\..\Users\administrator.SPDEV\Desktop\Post Customer.png = ..\..\..\Users\administrator.SPDEV\Desktop\Post Customer.png
+		..\..\..\Users\administrator.SPDEV\Desktop\Put Customer.png = ..\..\..\Users\administrator.SPDEV\Desktop\Put Customer.png
+		..\..\..\Users\administrator.SPDEV\Desktop\Swagger UI - Customer Web Api.PNG = ..\..\..\Users\administrator.SPDEV\Desktop\Swagger UI - Customer Web Api.PNG
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{47F1436F-E1CA-4B48-8D7C-7860221A2158}"
 EndProject
