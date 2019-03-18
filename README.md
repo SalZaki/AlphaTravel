@@ -121,6 +121,7 @@ V1.0
 ##### DELETE a customer
 ###### Request Url
 `https://localhost:44351/api/v1/customers/1`
+
 ![](Delete%20Customer.png)
 
 
