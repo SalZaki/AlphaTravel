@@ -1,36 +1,37 @@
 ﻿namespace Alpha.Travel.Application.Destinations.QueryHandlers
 {
-    using System;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
 
     using FluentValidation;
-    using MediatR;
     using Microsoft.EntityFrameworkCore;
 
     using Persistence;
     using Queries;
     using Models;
+    using Exceptions;
+    using Common.Handlers;
 
-    public class GetDestinationPreviewQueryHandler : IRequestHandler<GetDestinationPreviewQuery, DestinationResponse>
+    public class GetDestinationPreviewQueryHandler : ValidationHandler<GetDestinationPreviewQuery, DestinationPreviewDto>
     {
-        private readonly AlphaTravelDbContext _context;
+        public GetDestinationPreviewQueryHandler(
+            AlphaTravelDbContext context,
+            IValidator<GetDestinationPreviewQuery> validator)
+            : base(context, validator) { }
 
-        public GetDestinationPreviewQueryHandler(AlphaTravelDbContext context)
+        public override async Task<DestinationPreviewDto> OnHandle(GetDestinationPreviewQuery request, CancellationToken cancellationToken)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
-        }
+            int id = int.Parse(request.Id);
 
-        public async Task<DestinationResponse> Handle(GetDestinationPreviewQuery request, CancellationToken cancellationToken)
-        {
-            var response = new DestinationResponse
-            {
-                Data = await _context.Destinations
+            var response = await Context.Destinations
                 .Select(DestinationPreviewDto.Projection)
-                .Where(x => x.Id == request.Id)
-                .FirstOrDefaultAsync(cancellationToken)
-            };
+                .SingleOrDefaultAsync(r => r.Id == id, cancellationToken);
+
+            if (response == null)
+            {
+                throw new DestinationNotFoundException();
+            }
 
             return response;
         }

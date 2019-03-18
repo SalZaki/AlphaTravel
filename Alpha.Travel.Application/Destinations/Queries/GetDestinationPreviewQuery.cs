@@ -1,11 +1,10 @@
 ﻿namespace Alpha.Travel.Application.Destinations.Queries
 {
     using MediatR;
-    using Destinations.Models;
-    using Common.Models.Responses;
+    using Models;
 
-    public class GetDestinationPreviewQuery : IRequest<DestinationResponse>
+    public class GetDestinationPreviewQuery : IRequest<DestinationPreviewDto>
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
     }
 }

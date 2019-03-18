@@ -4,9 +4,15 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>C:\Development\GitHub\AlphaTravel\Alpha.Travel.WebApi.Host\bin\Debug\netcoreapp2.1\Alpha.Travel.WebApi.xml</DocumentationFile>
+    <OutputPath></OutputPath>
+    <NoWarn>1701;1702,1591</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="MediatR" Version="6.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.7" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.8" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="3.1.2" />
   </ItemGroup>
@@ -14,11 +20,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Alpha.Travel.Application\Alpha.Travel.Application.csproj" />
     <ProjectReference Include="..\Alpha.Travel.Common\Alpha.Travel.Common.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Filters\" />
-    <Folder Include="Models\Requests\" />
   </ItemGroup>
 
 </Project>

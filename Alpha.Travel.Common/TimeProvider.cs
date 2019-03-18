@@ -1,7 +1,6 @@
 ﻿namespace Alpha.Travel.Common
 {
     using System;
-    using Interfaces;
 
     public class TimeProvider : ITimeProvider
     {
