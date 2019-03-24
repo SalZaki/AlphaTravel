@@ -9,8 +9,11 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Options;
+    using Application.Models;
+    using Application.Common.Models;
     using Application.Customers.Queries;
-    using Alpha.Travel.Application.Customers.Commands;
+    using Application.Customers.Commands;
+    using System;
 
     [ApiController]
     [ApiVersion("1.0")]
@@ -25,12 +28,10 @@
 
         public CustomersController(
             IMediator mediator,
-            IMapper mapper,
             IOptionsSnapshot<ApiSettings> apiSettings)
         {
             _apiSettings = apiSettings.Value;
             _mediator = mediator;
-            _mapper = mapper;
             _documentationUrl = _apiSettings.ApiDocumentationUrl.Replace("{VERSION}", "1") + "/customers";
         }
 
@@ -41,7 +42,7 @@
         /// <param name="cancellationToken">a cancellation toekn.</param>
         /// <returns>A destination.</returns>
         [HttpGet("{id}", Name = nameof(GetCustomerByIdAsync))]
-        [ProducesResponseType(typeof(Customer), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CustomerPreviewDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -50,8 +51,7 @@
             CancellationToken cancellationToken = default(CancellationToken))
         {
             var query = new GetCustomerPreviewQuery { Id = id };
-            var customer = await _mediator.Send(query, cancellationToken).ConfigureAwait(false);
-            var response = _mapper.Map<Customer>(customer);
+            var response = await _mediator.Send(query, cancellationToken).ConfigureAwait(false);
             return Ok(response);
         }
 
@@ -64,7 +64,7 @@
         /// <param name="cancellationToken">a cancellation toekn.</param>
         /// <returns>A paged collection of customers.</returns>
         [HttpGet(Name = nameof(GetAllCustomersAsync))]
-        [ProducesResponseType(typeof(PagedCollection<Customer>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PagedResult<CustomerPreviewDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -74,27 +74,20 @@
             [FromQuery]SearchOptions searchOptions,
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            pagingOptions.Limit = pagingOptions.Limit ?? _apiSettings.DefaultPageSize;
-            pagingOptions.Offset = pagingOptions.Offset ?? _apiSettings.DefaultPageIndex;
+            pagingOptions.PageNumber = pagingOptions.PageNumber ?? _apiSettings.DefaultPageNumber;
+            pagingOptions.PageSize = pagingOptions.PageSize ?? _apiSettings.DefaultPageSize;
 
             var query = new GetCustomersPreviewQuery
             {
-                Offset = pagingOptions.Offset.Value,
-                Limit = pagingOptions.Limit.Value,
+                PageNumber = pagingOptions.PageNumber.Value,
+                PageSize = pagingOptions.PageSize.Value,
                 OrderBy = sortOptions.OrderBy,
                 Query = searchOptions.Query
             };
 
             var customers = await _mediator.Send(query, cancellationToken).ConfigureAwait(false);
-            var items = _mapper.Map<Customer[]>(customers.Items);
 
-            var response = PagedCollection<Customer>.Create(
-                Link.ToCollection(nameof(GetAllCustomersAsync)),
-                items,
-                customers.Count,
-                pagingOptions);
-
-            return Ok(response);
+            return Ok(customers);
         }
 
         /// <summary>
@@ -104,7 +97,7 @@
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         [HttpPost(Name = nameof(AddCustomerAsync))]
-        [ProducesResponseType(typeof(Customer), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(CustomerPreviewDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> AddCustomerAsync(
@@ -140,7 +133,7 @@
         /// <param name="id"></param>
         /// <param name="command"></param>
         /// <param name="cancellationToken"></param>
-        /// <returns></returns>
+        // <returns></returns>
         [HttpPut("{id}", Name = nameof(UpdateCustomerAsync))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -151,6 +144,11 @@
             [FromBody]UpdateCustomer command,
             CancellationToken cancellationToken = default(CancellationToken))
         {
+            if (id != command.Id)
+            {
+                return BadRequest();
+            }
+
             command.Id = id;
             await _mediator.Send(command, cancellationToken).ConfigureAwait(false);
             return NoContent();

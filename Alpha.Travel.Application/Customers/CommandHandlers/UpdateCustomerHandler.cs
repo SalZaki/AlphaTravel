@@ -20,6 +20,8 @@
         public async Task<Unit> Handle(UpdateCustomer request, CancellationToken cancellationToken)
         {
             var id = int.Parse(request.Id);
+
+
             var entity = _context.Customers.SingleOrDefault(x => x.Id == id);
             if (entity == null)
             {

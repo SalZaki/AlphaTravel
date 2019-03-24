@@ -11,6 +11,8 @@
     using Microsoft.Extensions.Options;
     using Application.Destinations.Commands;
     using Application.Destinations.Queries;
+    using Application.Models;
+    using Application.Common.Models;
 
     //[Authorize]
     [ApiController]
@@ -26,12 +28,10 @@
 
         public DestinationsController(
             IMediator mediator,
-            IMapper mapper,
             IOptionsSnapshot<ApiSettings> apiSettings)
         {
             _apiSettings = apiSettings.Value;
             _mediator = mediator;
-            _mapper = mapper;
             _documentationUrl = _apiSettings.ApiDocumentationUrl.Replace("{VERSION}", "1") + "/destinations";
         }
 
@@ -41,18 +41,17 @@
         /// <param name="id">The Id of destination.</param>
         /// <param name="cancellationToken">a cancellation toekn.</param>
         /// <returns>A destination.</returns>
-        [HttpGet("{id}", Name = nameof(GetByIdAsync))]
-        [ProducesResponseType(typeof(Destination), StatusCodes.Status200OK)]
+        [HttpGet("{id}", Name = nameof(GetDestinationByIdAsync))]
+        [ProducesResponseType(typeof(DestinationPreviewDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetByIdAsync(
+        public async Task<IActionResult> GetDestinationByIdAsync(
             [FromRoute] string id,
             CancellationToken cancellationToken = default(CancellationToken))
         {
             var query = new GetDestinationPreviewQuery { Id = id };
-            var destination = await _mediator.Send(query, cancellationToken).ConfigureAwait(false);
-            var response = _mapper.Map<Destination>(destination);
+            var response = await _mediator.Send(query, cancellationToken).ConfigureAwait(false);
             return Ok(response);
         }
 
@@ -64,56 +63,49 @@
         /// <param name="searchOptions"></param>
         /// <param name="cancellationToken">a cancellation toekn.</param>
         /// <returns>A paged collection of destinations.</returns>
-        [HttpGet(Name = nameof(GetAllAsync))]
-        [ProducesResponseType(typeof(PagedCollection<Destination>), StatusCodes.Status200OK)]
+        [HttpGet(Name = nameof(GetAllDestinationsAsync))]
+        [ProducesResponseType(typeof(PagedResult<DestinationPreviewDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetAllAsync(
+        public async Task<IActionResult> GetAllDestinationsAsync(
             [FromQuery]PagingOptions pagingOptions,
             [FromQuery]SortOptions sortOptions,
             [FromQuery]SearchOptions searchOptions,
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            pagingOptions.Limit = pagingOptions.Limit ?? _apiSettings.DefaultPageSize;
-            pagingOptions.Offset = pagingOptions.Offset ?? _apiSettings.DefaultPageIndex;
+            pagingOptions.PageNumber = pagingOptions.PageNumber ?? _apiSettings.DefaultPageNumber;
+            pagingOptions.PageSize = pagingOptions.PageSize ?? _apiSettings.DefaultPageSize;
 
             var query = new GetDestinationsPreviewQuery
             {
-                Offset = pagingOptions.Offset.Value,
-                Limit = pagingOptions.Limit.Value,
+                PageNumber = pagingOptions.PageNumber.Value,
+                PageSize = pagingOptions.PageSize.Value,
                 OrderBy = sortOptions.OrderBy,
                 Query = searchOptions.Query
             };
 
             var destinations = await _mediator.Send(query, cancellationToken).ConfigureAwait(false);
-            var items = _mapper.Map<Destination[]>(destinations.Items);
 
-            var response = PagedCollection<Destination>.Create(
-                Link.ToCollection(nameof(GetAllAsync)),
-                items,
-                destinations.Count,
-                pagingOptions);
-
-            return Ok(response);
+            return Ok(destinations);
         }
 
         /// <summary>
-        /// Addes a destination
+        /// Adds a destination
         /// </summary>
         /// <param name="command"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        [HttpPost(Name = nameof(AddAsync))]
-        [ProducesResponseType(typeof(Destination), StatusCodes.Status201Created)]
+        [HttpPost(Name = nameof(AddDestinationAsync))]
+        [ProducesResponseType(typeof(DestinationPreviewDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> AddAsync(
+        public async Task<IActionResult> AddDestinationAsync(
             [FromBody]CreateDestination command,
             CancellationToken cancellationToken = default(CancellationToken))
         {
             var result = await _mediator.Send(command, cancellationToken).ConfigureAwait(false);
-            return Created(Url.Link(nameof(GetByIdAsync), new { result.Id }), null);
+            return Created(Url.Link(nameof(GetDestinationByIdAsync), new { result.Id }), null);
         }
 
         /// <summary>
@@ -122,12 +114,12 @@
         /// <param name="id"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        [HttpDelete("{id}", Name = nameof(DeleteAsync))]
+        [HttpDelete("{id}", Name = nameof(DeleteDestinationAsync))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> DeleteAsync(
+        public async Task<IActionResult> DeleteDestinationAsync(
             [FromRoute]string id,
             CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -142,12 +134,12 @@
         /// <param name="command"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        [HttpPut("{id}")]
+        [HttpPut("{id}", Name = nameof(UpdateDestinationAsync))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UpdateAsync(
+        public async Task<IActionResult> UpdateDestinationAsync(
             [FromRoute]string id,
             [FromBody]UpdateDestination command,
             CancellationToken cancellationToken = default(CancellationToken))

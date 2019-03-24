@@ -1,14 +1,16 @@
-namespace Alpha.Travel.WebApi.IntegrationTests.Controller
+﻿namespace Alpha.Travel.WebApi.IntegrationTests
 {
+    using Persistence;
+    using WebApi.Host;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.AspNetCore.Mvc.Testing;
     using Microsoft.EntityFrameworkCore;
-    using Persistence;
-    using WebApi.Host;
 
-    public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<Startup>
+    public abstract class WebApplicationFactory : WebApplicationFactory<Startup>
     {
+        public WebApplicationFactory() { }
+
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             builder.ConfigureServices(services =>
@@ -31,9 +33,7 @@ namespace Alpha.Travel.WebApi.IntegrationTests.Controller
                     {
                         SeedData.PopulateTestData(appDb);
                     }
-                    catch
-                    {
-                    }
+                    catch { }
                 }
             });
         }

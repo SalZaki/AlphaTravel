@@ -2,9 +2,8 @@
 {
     public enum Error
     {
-        CreateUserFailed,
+        CreateCustomerFailed,
         ResetPasswordFailed,
-        InvalidClientId,
         LoginFailed,
         InvalidRefreshToken,
         InvalidToken,
@@ -17,7 +16,6 @@
         InvalidDestinationTitle,
         InvalidPageNumber,
         InvalidPageSize,
-        TooManySubcategories,
         InclusiveBetweenValidator
     }
 }

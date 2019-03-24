@@ -6,7 +6,7 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Newtonsoft.Json;
-    using Models;
+    using Application.Common.Models;
 
     [ExcludeFromCodeCoverage]
     public sealed class BadRequestResult : IActionResult

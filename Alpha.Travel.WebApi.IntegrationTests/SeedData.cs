@@ -1,8 +1,8 @@
 ﻿namespace Alpha.Travel.WebApi.IntegrationTests
 {
-    using Alpha.Travel.Domain.Entities;
-    using Persistence;
     using System;
+    using Domain.Entities;
+    using Persistence;
 
     public static class SeedData
     {

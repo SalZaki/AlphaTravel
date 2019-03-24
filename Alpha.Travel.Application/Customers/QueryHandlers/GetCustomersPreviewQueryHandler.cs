@@ -1,22 +1,29 @@
 ﻿namespace Alpha.Travel.Application.Customers.QueryHandlers
 {
+    using System;
+    using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using System.Linq.Dynamic.Core;
+
     using Queries;
     using Models;
     using Persistence;
     using FluentValidation;
     using Microsoft.EntityFrameworkCore;
-    using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
     using Common.Handlers;
     using Domain.Entities;
-    using System.Linq.Dynamic.Core;
+    using Common.Models;
+    using Common.Queries;
 
-    public class GetCustomersPreviewQueryHandler : ValidationHandler<GetCustomersPreviewQuery, PagedResults<CustomerPreviewDto>>
+    public class GetCustomersPreviewQueryHandler : BaseValidationHandler<GetCustomersPreviewQuery, Common.Models.PagedResult<CustomerPreviewDto>>
     {
-        public GetCustomersPreviewQueryHandler(AlphaTravelDbContext context, IValidator<GetCustomersPreviewQuery> validator) : base(context, validator) { }
+        public GetCustomersPreviewQueryHandler(
+            AlphaTravelDbContext context,
+            IValidator<GetCustomersPreviewQuery> validator)
+            : base(context, validator) { }
 
-        public override async Task<PagedResults<CustomerPreviewDto>> OnHandle(GetCustomersPreviewQuery request, CancellationToken cancellationToken)
+        public override async Task<Common.Models.PagedResult<CustomerPreviewDto>> OnHandle(GetCustomersPreviewQuery request, CancellationToken cancellationToken)
         {
             var query = Context.Customers as IQueryable<Customer>;
 
@@ -34,17 +41,24 @@
 
             var count = await query.CountAsync(cancellationToken);
 
-            var items = await query
+            var customers = await query
                 .Select(CustomerPreviewDto.Projection)
-                .Skip(request.Offset)
-                .Take(request.Limit)
-                .ToArrayAsync(cancellationToken);
+                .Skip(request.PageSize * (request.PageNumber - 1))
+                .Take(request.PageSize)
+                .ToListAsync(cancellationToken);
 
-            return new PagedResults<CustomerPreviewDto>
+            var response = new Common.Models.PagedResult<CustomerPreviewDto>
             {
-                Items = items,
-                Count = count
+                Data = customers,
+                MetaData = new MetaData
+                {
+                    TotalRecords = count,
+                    PageCount = Math.Ceiling(count / (double)request.PageSize),
+                    PageNumber = request.PageNumber
+                }
             };
+
+            return response;
         }
     }
 }

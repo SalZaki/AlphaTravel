@@ -1,12 +1,12 @@
 ﻿namespace Alpha.Travel.WebApi.Filters.Exceptions
 {
-    using Alpha.Travel.WebApi.Results;
-    using Application.Common.Enums;
-    using FluentValidation;
-    using Microsoft.AspNetCore.Mvc.Filters;
-    using Microsoft.Extensions.Options;
     using System;
     using System.Linq;
+    using Results;
+    using FluentValidation;
+    using Application.Common.Enums;
+    using Microsoft.AspNetCore.Mvc.Filters;
+    using Microsoft.Extensions.Options;
 
     public class ValidationExceptionFilter : IExceptionFilter
     {

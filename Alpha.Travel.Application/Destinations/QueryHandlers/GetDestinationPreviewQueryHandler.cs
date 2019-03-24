@@ -13,7 +13,7 @@
     using Exceptions;
     using Common.Handlers;
 
-    public class GetDestinationPreviewQueryHandler : ValidationHandler<GetDestinationPreviewQuery, DestinationPreviewDto>
+    public class GetDestinationPreviewQueryHandler : BaseValidationHandler<GetDestinationPreviewQuery, DestinationPreviewDto>
     {
         public GetDestinationPreviewQueryHandler(
             AlphaTravelDbContext context,

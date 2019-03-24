@@ -22,6 +22,7 @@
             _context = context;
             _mediator = mediator;
         }
+
         public async Task<CustomerPreviewDto> Handle(CreateCustomer request, CancellationToken cancellationToken)
         {
             int id = int.Parse(request.Id);

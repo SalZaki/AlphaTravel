@@ -8,13 +8,13 @@
     using FluentValidation;
     using MediatR;
 
-    public abstract class ValidationHandler<TRequest, TResponse> : IRequestHandler<TRequest, TResponse> where TRequest : IRequest<TResponse>
+    public abstract class BaseValidationHandler<TRequest, TResponse> : IRequestHandler<TRequest, TResponse> where TRequest : IRequest<TResponse>
     {
         public AlphaTravelDbContext Context { get; }
 
         public IValidator<TRequest> Validator { get; }
 
-        public ValidationHandler(AlphaTravelDbContext context, IValidator<TRequest> validator)
+        public BaseValidationHandler(AlphaTravelDbContext context, IValidator<TRequest> validator)
         {
             Context = context ?? throw new ArgumentNullException(nameof(context));
             Validator = validator;

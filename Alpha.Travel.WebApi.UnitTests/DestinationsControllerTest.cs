@@ -15,23 +15,22 @@
     using Controllers.V1;
     using Models;
     using Microsoft.Extensions.Options;
-    using AutoMapper;
+    using Application.Common.Models;
 
     [TestFixture]
     public class DestinationsControllerTest : BaseTest
     {
         [Test]
-        public void Destinations_GetAllAsync_Has_HttpGet_Attribute()
+        public void GetAllAsync_Has_HttpGet_Attribute()
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
-            var mockMapper = new Mock<IMapper>();
             var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
             mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
-            var sut = new DestinationsController(mockMediator.Object, mockMapper.Object, mockApiSettings.Object);
+            var sut = new DestinationsController(mockMediator.Object, mockApiSettings.Object);
 
             // Act
-            var attributes = sut.GetAttributesOn(x => x.GetAllAsync(
+            var attributes = sut.GetAttributesOn(x => x.GetAllDestinationsAsync(
                 It.IsAny<PagingOptions>(),
                 It.IsAny<SortOptions>(),
                 It.IsAny<SearchOptions>(),
@@ -39,22 +38,21 @@
 
             // Assert
             attributes.Should().NotBeNull();
-            attributes.Name.Should().Be("GetAllAsync");
+            attributes.Name.Should().Be("GetAllDestinationsAsync");
         }
 
         [Test]
-        public void Destinations_GetAllAsync_Has_ProducesResponse_Atttribute_With_200_StatusCode()
+        public void GetAllAsync_Has_ProducesResponse_Atttribute_With_200_StatusCode()
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
-            var mockMapper = new Mock<IMapper>();
             var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
             mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
-            var sut = new DestinationsController(mockMediator.Object, mockMapper.Object, mockApiSettings.Object);
+            var sut = new DestinationsController(mockMediator.Object, mockApiSettings.Object);
             var expectedStatusCode = 200;
 
             // Act
-            var attributes = sut.GetAttributesOn(x => x.GetAllAsync(
+            var attributes = sut.GetAttributesOn(x => x.GetAllDestinationsAsync(
                 It.IsAny<PagingOptions>(),
                 It.IsAny<SortOptions>(),
                 It.IsAny<SearchOptions>(),
@@ -67,18 +65,17 @@
         }
 
         [Test]
-        public void Destinations_GetAllAsync_Has_ProducesResponse_Atttribute_With_Correct_Return_Type()
+        public void GetAllAsync_Has_ProducesResponse_Atttribute_With_Correct_Return_Type()
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
-            var mockMapper = new Mock<IMapper>();
             var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
             mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
-            var sut = new DestinationsController(mockMediator.Object, mockMapper.Object, mockApiSettings.Object);
+            var sut = new DestinationsController(mockMediator.Object, mockApiSettings.Object);
             var expectedTyped = typeof(IEnumerable<DestinationPreviewDto>);
 
             // Act
-            var attributes = sut.GetAttributesOn(x => x.GetAllAsync(
+            var attributes = sut.GetAttributesOn(x => x.GetAllDestinationsAsync(
                 It.IsAny<PagingOptions>(),
                 It.IsAny<SortOptions>(),
                 It.IsAny<SearchOptions>(),
@@ -91,18 +88,17 @@
         }
 
         [Test]
-        public void Destinations_GetAllAsync_Has_ProducesResponse_Atttribute_With_204_StatusCode()
+        public void GetAllAsync_Has_ProducesResponse_Atttribute_With_204_StatusCode()
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
-            var mockMapper = new Mock<IMapper>();
             var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
             mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
-            var sut = new DestinationsController(mockMediator.Object, mockMapper.Object, mockApiSettings.Object);
+            var sut = new DestinationsController(mockMediator.Object, mockApiSettings.Object);
             var expectedStatusCode = 204;
 
             // Act
-            var attributes = sut.GetAttributesOn(x => x.GetAllAsync(
+            var attributes = sut.GetAttributesOn(x => x.GetAllDestinationsAsync(
                 It.IsAny<PagingOptions>(),
                 It.IsAny<SortOptions>(),
                 It.IsAny<SearchOptions>(),
@@ -115,41 +111,17 @@
         }
 
         [Test]
-        public void Destinations_GetAllAsync_Has_ProducesResponse_Atttribute_With_404_StatusCode()
+        public void GetAllAsync_Has_ProducesResponse_Atttribute_With_404_StatusCode()
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
-            var mockMapper = new Mock<IMapper>();
             var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
             mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
-            var sut = new DestinationsController(mockMediator.Object, mockMapper.Object, mockApiSettings.Object);
+            var sut = new DestinationsController(mockMediator.Object, mockApiSettings.Object);
             var expectedStatusCode = 404;
 
             // Act
-            var attributes = sut.GetAttributesOn(x => x.GetAllAsync(It.IsAny<PagingOptions>(),
-                It.IsAny<SortOptions>(),
-                It.IsAny<SearchOptions>(),
-                It.IsAny<CancellationToken>())).OfType<ProducesResponseTypeAttribute>();
-
-            // Assert
-            attributes.Should().NotBeNull();
-            attributes.Count().Should().BeGreaterThan(0);
-            attributes.Select(x => x.StatusCode == expectedStatusCode).Should().NotBeNull();
-        }
-
-        [Test]
-        public void Destinations_GetAllAsync_Has_ProducesResponse_Atttribute_With_400_StatusCode()
-        {
-            // Arrange
-            var mockMediator = new Mock<IMediator>();
-            var mockMapper = new Mock<IMapper>();
-            var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
-            mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
-            var sut = new DestinationsController(mockMediator.Object, mockMapper.Object, mockApiSettings.Object);
-            var expectedStatusCode = 400;
-
-            // Act
-            var attributes = sut.GetAttributesOn(x => x.GetAllAsync(
+            var attributes = sut.GetAttributesOn(x => x.GetAllDestinationsAsync(
                 It.IsAny<PagingOptions>(),
                 It.IsAny<SortOptions>(),
                 It.IsAny<SearchOptions>(),
@@ -162,37 +134,58 @@
         }
 
         [Test]
-        public async Task Destinations_GetByIdAsync_GetDestinationPreviewQuery_Has_Correct_Data()
+        public void GetAllAsync_Has_ProducesResponse_Atttribute_With_400_StatusCode()
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
-            var mockMapper = new Mock<IMapper>();
             var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
             mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
-            var sut = new DestinationsController(mockMediator.Object, mockMapper.Object, mockApiSettings.Object);
+            var sut = new DestinationsController(mockMediator.Object, mockApiSettings.Object);
+            var expectedStatusCode = 400;
+
+            // Act
+            var attributes = sut.GetAttributesOn(x => x.GetAllDestinationsAsync(
+                It.IsAny<PagingOptions>(),
+                It.IsAny<SortOptions>(),
+                It.IsAny<SearchOptions>(),
+                It.IsAny<CancellationToken>())).OfType<ProducesResponseTypeAttribute>();
+
+            // Assert
+            attributes.Should().NotBeNull();
+            attributes.Count().Should().BeGreaterThan(0);
+            attributes.Select(x => x.StatusCode == expectedStatusCode).Should().NotBeNull();
+        }
+
+        [Test]
+        public async Task GetByIdAsync_GetDestinationPreviewQuery_Has_Correct_Data()
+        {
+            // Arrange
+            var mockMediator = new Mock<IMediator>();
+            var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
+            mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
+            var sut = new DestinationsController(mockMediator.Object, mockApiSettings.Object);
             var destinationId = "1";
 
             // Act
-            await sut.GetByIdAsync(destinationId, default(CancellationToken));
+            await sut.GetDestinationByIdAsync(destinationId, default(CancellationToken));
 
             // Assert
             mockMediator.Verify(x => x.Send(It.Is<GetDestinationPreviewQuery>(d => d.Id == destinationId), It.IsAny<CancellationToken>()));
         }
 
         [Test]
-        public async Task Destinations_GetByIdAsync_Returns_OK_200_Result()
+        public async Task GetByIdAsync_Returns_OK_200_Result()
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
             mockMediator.Setup(x => x.Send(It.IsAny<GetDestinationPreviewQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Destination);
             var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
             mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
-            var mockMapper = new Mock<IMapper>();
-            var sut = new DestinationsController(mockMediator.Object, mockMapper.Object, mockApiSettings.Object);
+            var sut = new DestinationsController(mockMediator.Object, mockApiSettings.Object);
             var destinationId = "1";
 
             // Act
-            var result = await sut.GetByIdAsync(destinationId, default(CancellationToken));
+            var result = await sut.GetDestinationByIdAsync(destinationId, default(CancellationToken));
 
             // Assert
             var response = result.Should().BeOfType<OkObjectResult>().Subject;
@@ -200,20 +193,19 @@
         }
 
         [Test]
-        public async Task Destinations_GetAllAsync_Returns_OK_200_Result()
+        public async Task GetAllAsync_Returns_OK_200_Result()
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
             mockMediator.Setup(x => x.Send(It.IsAny<GetDestinationsPreviewQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Destinations);
             var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
             mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
-            var mockMapper = new Mock<IMapper>();
-            var sut = new DestinationsController(mockMediator.Object, mockMapper.Object, mockApiSettings.Object);
+            var sut = new DestinationsController(mockMediator.Object, mockApiSettings.Object);
 
             var pagingOptions = new PagingOptions
             {
-                Offset = 1,
-                Limit = 10
+                PageNumber = 1,
+                PageSize = 10
             };
 
             var sortOptions = new SortOptions
@@ -227,7 +219,7 @@
             };
 
             // Act
-            var result = await sut.GetAllAsync(pagingOptions, sortOptions, searchOptions, default(CancellationToken));
+            var result = await sut.GetAllDestinationsAsync(pagingOptions, sortOptions, searchOptions, default(CancellationToken));
 
             // Assert
             var response = result.Should().BeOfType<OkObjectResult>().Subject;
@@ -235,20 +227,18 @@
         }
 
         [Test]
-        public async Task Destinations_GetAllAsync_GetDestinationsPreviewQuery_Can_Verify()
+        public async Task GetAllAsync_GetDestinationsPreviewQuery_Can_Verify()
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
             mockMediator.Setup(x => x.Send(It.IsAny<GetDestinationsPreviewQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Destinations);
             var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
             mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
-            var mockMapper = new Mock<IMapper>();
-            mockMapper.Setup(m => m.Map<Destination, DestinationPreviewDto>(It.IsAny<Destination>())).Returns(new DestinationPreviewDto());
-            var sut = new DestinationsController(mockMediator.Object, mockMapper.Object, mockApiSettings.Object);
+            var sut = new DestinationsController(mockMediator.Object, mockApiSettings.Object);
             var pagingOptions = new PagingOptions
             {
-                Offset = 1,
-                Limit = 10
+                PageNumber = 1,
+                PageSize = 10
             };
 
             var sortOptions = new SortOptions
@@ -262,26 +252,25 @@
             };
 
             // Act
-            await sut.GetAllAsync(pagingOptions, sortOptions, searchOptions, default(CancellationToken));
+            await sut.GetAllDestinationsAsync(pagingOptions, sortOptions, searchOptions, default(CancellationToken));
 
             // Assert
             mockMediator.Verify(x => x.Send(It.IsAny<GetDestinationsPreviewQuery>(), It.IsAny<CancellationToken>()));
         }
 
         [Test]
-        public async Task Destinations_GetAllAsync_Returns_OK_200_Result_With_Correct_Data()
+        public async Task GetAllAsync_Returns_OK_200_Result_With_Correct_Data()
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
             mockMediator.Setup(x => x.Send(It.IsAny<GetDestinationsPreviewQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Destinations);
             var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
             mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
-            var mockMapper = new Mock<IMapper>();
-            var sut = new DestinationsController(mockMediator.Object, mockMapper.Object, mockApiSettings.Object);
+            var sut = new DestinationsController(mockMediator.Object, mockApiSettings.Object);
             var pagingOptions = new PagingOptions
             {
-                Offset = 1,
-                Limit = 10
+                PageNumber = 1,
+                PageSize = 10
             };
 
             var sortOptions = new SortOptions
@@ -295,13 +284,13 @@
             };
 
             // Act
-            var result = await sut.GetAllAsync(pagingOptions, sortOptions, searchOptions, default(CancellationToken));
+            var result = await sut.GetAllDestinationsAsync(pagingOptions, sortOptions, searchOptions, default(CancellationToken));
 
             // Assert
             var response = result.Should().BeOfType<OkObjectResult>().Subject;
             response.StatusCode.Should().Equals(200);
 
-            var destination = response.Value.Should().BeAssignableTo<PagedCollection<Destination>>().Subject;
+            var destination = response.Value.Should().BeAssignableTo<PagedResult<DestinationPreviewDto>>().Subject;
             destination.Data.Select(x => x.Id == 1).Should().NotBeNull();
             destination.Data.Select(x => x.Name == "London").Should().NotBeNull();
             destination.Data.Count().Should().Equals(3);

@@ -1,23 +1,13 @@
-﻿namespace Alpha.Travel.Application.Customers.Validators
+﻿namespace Alpha.Travel.Application.Destinations.Validators
 {
     using Common.Validators;
     using Common.Enums;
     using FluentValidation;
     using Queries;
 
-    public class GetCustomerPreviewQueryValidator : AbstractValidator<GetCustomerPreviewQuery>
+    public class GetDestinationsPreviewQueryValidator : AbstractValidator<GetDestinationsPreviewQuery>
     {
-        public GetCustomerPreviewQueryValidator()
-        {
-            RuleFor(x => x.Id)
-                .IsValidIntId()
-                .WithErrorCode(Error.InvalidDestinationId.ToString());
-        }
-    }
-
-    public class GetCustomersPreviewQueryValidator : AbstractValidator<GetCustomersPreviewQuery>
-    {
-        public GetCustomersPreviewQueryValidator()
+        public GetDestinationsPreviewQueryValidator()
         {
             RuleFor(x => x.PageNumber)
                 .IsValidIntId()

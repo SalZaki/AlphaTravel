@@ -31,8 +31,8 @@
                 Id = id,
                 Description = request.Description,
                 Name = request.Name,
-                CreatedBy = "WebApi",
-                CreatedOn = DateTime.UtcNow
+                CreatedBy = request.CreatedBy,
+                CreatedOn = request.CreatedOn
             };
 
             _context.Destinations.Add(entity);

@@ -14,21 +14,20 @@
     using Controllers.V1;
     using Models;
     using Microsoft.Extensions.Options;
-    using AutoMapper;
-    using Alpha.Travel.Application.Customers.Queries;
+    using Application.Customers.Queries;
+    using Application.Common.Models;
 
     [TestFixture]
     public class CustomersControllerTest : BaseTest
     {
         [Test]
-        public void Customers_GetAllAsync_Has_HttpGet_Attribute()
+        public void GetAllAsync_Has_HttpGet_Attribute()
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
-            var mockMapper = new Mock<IMapper>();
             var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
             mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
-            var sut = new CustomersController(mockMediator.Object, mockMapper.Object, mockApiSettings.Object);
+            var sut = new CustomersController(mockMediator.Object, mockApiSettings.Object);
 
             // Act
             var attributes = sut.GetAttributesOn(x => x.GetAllCustomersAsync(
@@ -43,14 +42,13 @@
         }
 
         [Test]
-        public void Customers_GetAllAsync_Has_ProducesResponse_Atttribute_With_200_StatusCode()
+        public void GetAllAsync_Has_ProducesResponse_Atttribute_With_200_StatusCode()
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
-            var mockMapper = new Mock<IMapper>();
             var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
             mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
-            var sut = new CustomersController(mockMediator.Object, mockMapper.Object, mockApiSettings.Object);
+            var sut = new CustomersController(mockMediator.Object, mockApiSettings.Object);
             var expectedStatusCode = 200;
 
             // Act
@@ -67,14 +65,13 @@
         }
 
         [Test]
-        public void Customers_GetAllAsync_Has_ProducesResponse_Atttribute_With_Correct_Return_Type()
+        public void GetAllAsync_Has_ProducesResponse_Atttribute_With_Correct_Return_Type()
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
-            var mockMapper = new Mock<IMapper>();
             var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
             mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
-            var sut = new CustomersController(mockMediator.Object, mockMapper.Object, mockApiSettings.Object);
+            var sut = new CustomersController(mockMediator.Object, mockApiSettings.Object);
             var expectedTyped = typeof(IEnumerable<CustomerPreviewDto>);
 
             // Act
@@ -91,14 +88,13 @@
         }
 
         [Test]
-        public void Customers_GetAllAsync_Has_ProducesResponse_Atttribute_With_204_StatusCode()
+        public void GetAllAsync_Has_ProducesResponse_Atttribute_With_204_StatusCode()
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
-            var mockMapper = new Mock<IMapper>();
             var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
             mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
-            var sut = new CustomersController(mockMediator.Object, mockMapper.Object, mockApiSettings.Object);
+            var sut = new CustomersController(mockMediator.Object, mockApiSettings.Object);
             var expectedStatusCode = 204;
 
             // Act
@@ -115,14 +111,13 @@
         }
 
         [Test]
-        public void Customers_GetAllAsync_Has_ProducesResponse_Atttribute_With_404_StatusCode()
+        public void GetAllAsync_Has_ProducesResponse_Atttribute_With_404_StatusCode()
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
-            var mockMapper = new Mock<IMapper>();
             var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
             mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
-            var sut = new CustomersController(mockMediator.Object, mockMapper.Object, mockApiSettings.Object);
+            var sut = new CustomersController(mockMediator.Object, mockApiSettings.Object);
             var expectedStatusCode = 404;
 
             // Act
@@ -139,14 +134,13 @@
         }
 
         [Test]
-        public void Customers_GetAllAsync_Has_ProducesResponse_Atttribute_With_400_StatusCode()
+        public void GetAllAsync_Has_ProducesResponse_Atttribute_With_400_StatusCode()
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
-            var mockMapper = new Mock<IMapper>();
             var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
             mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
-            var sut = new CustomersController(mockMediator.Object, mockMapper.Object, mockApiSettings.Object);
+            var sut = new CustomersController(mockMediator.Object, mockApiSettings.Object);
             var expectedStatusCode = 400;
 
             // Act
@@ -163,14 +157,13 @@
         }
 
         [Test]
-        public async Task Customers_GetByIdAsync_GetDestinationPreviewQuery_Has_Correct_Data()
+        public async Task GetByIdAsync_GetDestinationPreviewQuery_Has_Correct_Data()
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
-            var mockMapper = new Mock<IMapper>();
             var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
             mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
-            var sut = new CustomersController(mockMediator.Object, mockMapper.Object, mockApiSettings.Object);
+            var sut = new CustomersController(mockMediator.Object, mockApiSettings.Object);
             var customerId = "1";
 
             // Act
@@ -181,15 +174,14 @@
         }
 
         [Test]
-        public async Task Customers_GetByIdAsync_Returns_OK_200_Result()
+        public async Task GetByIdAsync_Returns_OK_200_Result()
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
             mockMediator.Setup(x => x.Send(It.IsAny<GetCustomerPreviewQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Customer);
             var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
             mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
-            var mockMapper = new Mock<IMapper>();
-            var sut = new CustomersController(mockMediator.Object, mockMapper.Object, mockApiSettings.Object);
+            var sut = new CustomersController(mockMediator.Object, mockApiSettings.Object);
             var customerId = "1";
 
             // Act
@@ -201,20 +193,19 @@
         }
 
         [Test]
-        public async Task Customers_GetAllAsync_Returns_OK_200_Result()
+        public async Task GetAllAsync_Returns_OK_200_Result()
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
             mockMediator.Setup(x => x.Send(It.IsAny<GetCustomersPreviewQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Customers);
             var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
             mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
-            var mockMapper = new Mock<IMapper>();
-            var sut = new CustomersController(mockMediator.Object, mockMapper.Object, mockApiSettings.Object);
+            var sut = new CustomersController(mockMediator.Object, mockApiSettings.Object);
 
             var pagingOptions = new PagingOptions
             {
-                Offset = 1,
-                Limit = 10
+                PageNumber = 1,
+                PageSize = 10
             };
 
             var sortOptions = new SortOptions
@@ -236,20 +227,18 @@
         }
 
         [Test]
-        public async Task Customers_GetAllAsync_GetCustomersPreviewQuery_Can_Verify()
+        public async Task GetAllAsync_GetCustomersPreviewQuery_Can_Verify()
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
             mockMediator.Setup(x => x.Send(It.IsAny<GetCustomersPreviewQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Customers);
             var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
             mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
-            var mockMapper = new Mock<IMapper>();
-            mockMapper.Setup(m => m.Map<Customer, CustomerPreviewDto>(It.IsAny<Customer>())).Returns(new CustomerPreviewDto());
-            var sut = new CustomersController(mockMediator.Object, mockMapper.Object, mockApiSettings.Object);
+            var sut = new CustomersController(mockMediator.Object, mockApiSettings.Object);
             var pagingOptions = new PagingOptions
             {
-                Offset = 1,
-                Limit = 10
+                PageNumber = 1,
+                PageSize = 10
             };
 
             var sortOptions = new SortOptions
@@ -270,19 +259,18 @@
         }
 
         [Test]
-        public async Task Customers_GetAllAsync_Returns_OK_200_Result_With_Correct_Data()
+        public async Task GetAllAsync_Returns_OK_200_Result_With_Correct_Data()
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
             mockMediator.Setup(x => x.Send(It.IsAny<GetCustomersPreviewQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Customers);
             var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
             mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
-            var mockMapper = new Mock<IMapper>();
-            var sut = new CustomersController(mockMediator.Object, mockMapper.Object, mockApiSettings.Object);
+            var sut = new CustomersController(mockMediator.Object, mockApiSettings.Object);
             var pagingOptions = new PagingOptions
             {
-                Offset = 1,
-                Limit = 10
+                PageNumber = 1,
+                PageSize = 10
             };
 
             var sortOptions = new SortOptions
@@ -302,7 +290,7 @@
             var response = result.Should().BeOfType<OkObjectResult>().Subject;
             response.StatusCode.Should().Equals(200);
 
-            var customers = response.Value.Should().BeAssignableTo<PagedCollection<Customer>>().Subject;
+            var customers = response.Value.Should().BeAssignableTo<PagedResult<CustomerPreviewDto>>().Subject;
             customers.Data.Select(x => x.Id == 1).Should().NotBeNull();
             customers.Data.Select(x => x.Firstname == "Jason").Should().NotBeNull();
             customers.Data.Count().Should().Equals(3);

@@ -4,17 +4,26 @@
     using WebApi.Results;
     using Microsoft.AspNetCore.Mvc.Filters;
     using Microsoft.Extensions.Options;
-    using Alpha.Travel.Application.Customers.Exceptions;
+    using Application.Customers.Exceptions;
 
-    public class CustomerNotFoundExceptionFilter : IExceptionFilter
+    public abstract class BaseExceptionFilter
     {
-        private const string ERORR_TITLE = "Not Found Error";
-        private readonly ApiSettings _apiSettings;
+        public string ErrorTitle { get; }
 
-        public CustomerNotFoundExceptionFilter(IOptionsSnapshot<ApiSettings> apiSettings)
+        public ApiSettings ApiSettings { get; }
+
+        public BaseExceptionFilter(ApiSettings apiSettings, string errorTitle)
         {
-            _apiSettings = apiSettings.Value;
+            ApiSettings = apiSettings;
+            ErrorTitle = errorTitle;
         }
+    }
+
+    public sealed class CustomerNotFoundExceptionFilter : BaseExceptionFilter, IExceptionFilter
+    {
+        public CustomerNotFoundExceptionFilter(IOptionsSnapshot<ApiSettings> apiSettings) :
+            base(apiSettings.Value, "Customer Not Found")
+        { }
 
         public void OnException(ExceptionContext context)
         {
@@ -22,10 +31,10 @@
             {
                 var controller = context.RouteData.Values["controller"].ToString().ToLowerInvariant();
                 var version = context.RouteData.Values["version"].ToString().ToLowerInvariant();
-                var documentationUrl = _apiSettings.ApiDocumentationUrl.Replace("{VERSION}", version) + controller;
+                var documentationUrl = ApiSettings.ApiDocumentationUrl.Replace("{VERSION}", version) + controller;
                 var errorType = Error.InvalidCustomerId.ToString();
                 var errorMessage = $"Customer not found exception has occured, bacause invalid customer id was passed.";
-                context.Result = new NotFoundResult(ERORR_TITLE, errorMessage, errorType, documentationUrl);
+                context.Result = new NotFoundResult(ErrorTitle, errorMessage, errorType, documentationUrl);
                 context.ExceptionHandled = true;
             }
         }

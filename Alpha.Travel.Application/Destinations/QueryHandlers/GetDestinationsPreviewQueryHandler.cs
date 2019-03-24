@@ -1,31 +1,36 @@
-﻿
-namespace Alpha.Travel.Application.Destinations.QueryHandlers
+﻿namespace Alpha.Travel.Application.Destinations.QueryHandlers
 {
+    using System;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using System.Linq.Dynamic.Core;
 
-    using Models;
+    using FluentValidation;
+    using Microsoft.EntityFrameworkCore;
+
     using Persistence;
     using Queries;
-    using Microsoft.EntityFrameworkCore;
-    using FluentValidation;
+    using Models;
     using Common.Handlers;
+    using Common.Models;
+    using Common.Queries;
     using Domain.Entities;
 
-    public class GetDestinationsPreviewQueryHandler : ValidationHandler<GetDestinationsPreviewQuery, PagedResults<DestinationPreviewDto>>
+    public class GetDestinationsPreviewQueryHandler : BaseValidationHandler<GetDestinationsPreviewQuery, Common.Models.PagedResult<DestinationPreviewDto>>
     {
-        public GetDestinationsPreviewQueryHandler(AlphaTravelDbContext context, IValidator<GetDestinationsPreviewQuery> validator) : base(context, validator) { }
+        public GetDestinationsPreviewQueryHandler(
+            AlphaTravelDbContext context,
+            IValidator<GetDestinationsPreviewQuery> validator)
+            : base(context, validator) { }
 
-        public override async Task<PagedResults<DestinationPreviewDto>> OnHandle(GetDestinationsPreviewQuery request, CancellationToken cancellationToken)
+        public override async Task<Common.Models.PagedResult<DestinationPreviewDto>> OnHandle(GetDestinationsPreviewQuery request, CancellationToken cancellationToken)
         {
             var query = Context.Destinations as IQueryable<Destination>;
 
             if (request.HasOrder())
             {
-                query = query
-                    .OrderBy(request.OrderBy, request.IsDescending());
+                query = query.OrderBy(request.OrderBy, request.IsDescending());
             }
 
             if (request.HasQuery())
@@ -37,17 +42,24 @@ namespace Alpha.Travel.Application.Destinations.QueryHandlers
 
             var count = await query.CountAsync(cancellationToken);
 
-            var items = await query
+            var destinations = await query
                 .Select(DestinationPreviewDto.Projection)
-                .Skip(request.Offset)
-                .Take(request.Limit)
-                .ToArrayAsync(cancellationToken);
+                .Skip(request.PageSize * (request.PageNumber - 1))
+                .Take(request.PageSize)
+                .ToListAsync(cancellationToken);
 
-            return new PagedResults<DestinationPreviewDto>
+            var response = new Common.Models.PagedResult<DestinationPreviewDto>
             {
-                Items = items,
-                Count = count
+                Data = destinations,
+                MetaData = new MetaData
+                {
+                    PageCount = Math.Ceiling(count / (double)request.PageSize),
+                    TotalRecords = count,
+                    PageNumber = request.PageNumber
+                }
             };
+
+            return response;
         }
     }
 }

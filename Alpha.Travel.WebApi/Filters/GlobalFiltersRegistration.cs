@@ -15,9 +15,6 @@
             filterCollection.Add<ValidationExceptionFilter>();
         }
 
-        public static void AddGlobalCustomFilters(this FilterCollection filterCollection)
-        {
-            filterCollection.Add<LinkRewritingFilter>();
-        }
+        public static void AddGlobalCustomFilters(this FilterCollection filterCollection) { }
     }
 }

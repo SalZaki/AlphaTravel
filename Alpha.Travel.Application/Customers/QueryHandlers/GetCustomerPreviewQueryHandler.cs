@@ -11,16 +11,16 @@
     using Exceptions;
     using Microsoft.EntityFrameworkCore;
 
-    public class GetDestinationPreviewQueryHandler : ValidationHandler<GetCustomerPreviewQuery, CustomerPreviewDto>
+    public class GetCustomerPreviewQueryHandler : BaseValidationHandler<GetCustomerPreviewQuery, CustomerPreviewDto>
     {
-        public GetDestinationPreviewQueryHandler(
+        public GetCustomerPreviewQueryHandler(
             AlphaTravelDbContext context,
             IValidator<GetCustomerPreviewQuery> validator)
             : base(context, validator) { }
 
         public override async Task<CustomerPreviewDto> OnHandle(GetCustomerPreviewQuery request, CancellationToken cancellationToken)
         {
-            int id = int.Parse(request.Id);
+            int id = int.Parse(request.Id); // move to model binding
 
             var response = await Context.Customers
                 .Select(CustomerPreviewDto.Projection)

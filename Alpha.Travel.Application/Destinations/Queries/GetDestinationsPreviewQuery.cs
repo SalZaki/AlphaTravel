@@ -1,16 +1,8 @@
 ﻿namespace Alpha.Travel.Application.Destinations.Queries
 {
-    using MediatR;
     using Models;
+    using MediatR;
+    using Common.Queries;
 
-    public class GetDestinationsPreviewQuery : IRequest<PagedResults<DestinationPreviewDto>>
-    {
-        public int Offset { get; set; }
-
-        public int Limit { get; set; }
-
-        public string OrderBy { get; set; }
-
-        public string Query { get; set; }
-    }
+    public class GetDestinationsPreviewQuery : BaseGetPreviewQuery, IRequest<Common.Models.PagedResult<DestinationPreviewDto>> { }
 }
