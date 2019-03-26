@@ -53,9 +53,12 @@
                 Data = destinations,
                 MetaData = new MetaData
                 {
-                    PageCount = Math.Ceiling(count / (double)request.PageSize),
                     TotalRecords = count,
-                    PageNumber = request.PageNumber
+                    PageCount = request.GetTotalPages(count),
+                    PageNumber = request.PageNumber,
+                    HasNext = request.HasNext(count),
+                    HasPrevious = request.HasPrevious(),
+                    PageSize = request.PageSize
                 }
             };
 

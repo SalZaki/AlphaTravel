@@ -5,7 +5,6 @@
 
     using MediatR;
     using Models;
-    using AutoMapper;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Options;
@@ -13,7 +12,6 @@
     using Application.Common.Models;
     using Application.Customers.Queries;
     using Application.Customers.Commands;
-    using System;
 
     [ApiController]
     [ApiVersion("1.0")]
@@ -23,18 +21,14 @@
     {
         private readonly ApiSettings _apiSettings;
         private readonly IMediator _mediator;
-        private readonly IMapper _mapper;
         private readonly string _documentationUrl;
 
-        public CustomersController(
-            IMediator mediator,
-            IOptionsSnapshot<ApiSettings> apiSettings)
+        public CustomersController(IMediator mediator, IOptionsSnapshot<ApiSettings> apiSettings)
         {
             _apiSettings = apiSettings.Value;
             _mediator = mediator;
             _documentationUrl = _apiSettings.ApiDocumentationUrl.Replace("{VERSION}", "1") + "/customers";
         }
-
         /// <summary>
         /// Retrieve the customer by id.
         /// </summary>
@@ -148,8 +142,6 @@
             {
                 return BadRequest();
             }
-
-            command.Id = id;
             await _mediator.Send(command, cancellationToken).ConfigureAwait(false);
             return NoContent();
         }

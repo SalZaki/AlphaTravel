@@ -34,7 +34,7 @@
         [JsonProperty(Order = -9, PropertyName = "first_name")]
         public string Firstname { get; set; }
 
-        [JsonProperty(Order = -8, PropertyName = "Surname")]
+        [JsonProperty(Order = -8, PropertyName = "surname")]
         public string Surname { get; set; }
 
         [JsonProperty(Order = -7, PropertyName = "password")]

@@ -14,7 +14,5 @@
             filterCollection.Add<CustomerNotFoundExceptionFilter>();
             filterCollection.Add<ValidationExceptionFilter>();
         }
-
-        public static void AddGlobalCustomFilters(this FilterCollection filterCollection) { }
     }
 }

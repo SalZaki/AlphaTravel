@@ -5,7 +5,6 @@
 
     using MediatR;
     using Models;
-    using AutoMapper;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Options;
@@ -23,7 +22,6 @@
     {
         private readonly ApiSettings _apiSettings;
         private readonly IMediator _mediator;
-        private readonly IMapper _mapper;
         private readonly string _documentationUrl;
 
         public DestinationsController(
@@ -129,7 +127,7 @@
         }
 
         /// <summary>
-        /// Updates a destionation
+        /// Updates a destination
         /// <param name="id"></param>
         /// <param name="command"></param>
         /// <param name="cancellationToken"></param>
@@ -144,7 +142,10 @@
             [FromBody]UpdateDestination command,
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            command.Id = id;
+            if (id != command.Id)
+            {
+                return BadRequest();
+            }
             await _mediator.Send(command, cancellationToken).ConfigureAwait(false);
             return NoContent();
         }

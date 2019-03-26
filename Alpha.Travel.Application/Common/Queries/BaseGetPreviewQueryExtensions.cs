@@ -7,12 +7,12 @@
     {
         public static bool HasPrevious(this BaseGetPreviewQuery queryParameters)
         {
-            return (queryParameters.PageSize > 1);
+            return (queryParameters.PageNumber > 1);
         }
 
         public static bool HasNext(this BaseGetPreviewQuery queryParameters, int totalCount)
         {
-            return (queryParameters.PageSize < (int)GetTotalPages(queryParameters, totalCount));
+            return (queryParameters.PageNumber < (int)GetTotalPages(queryParameters, totalCount));
         }
 
         public static double GetTotalPages(this BaseGetPreviewQuery queryParameters, int totalCount)

@@ -1,6 +1,5 @@
 ﻿namespace Alpha.Travel.Application.Customers.QueryHandlers
 {
-    using System;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -53,8 +52,11 @@
                 MetaData = new MetaData
                 {
                     TotalRecords = count,
-                    PageCount = Math.Ceiling(count / (double)request.PageSize),
-                    PageNumber = request.PageNumber
+                    PageCount = request.GetTotalPages(count),
+                    PageNumber = request.PageNumber,
+                    HasNext = request.HasNext(count),
+                    HasPrevious = request.HasPrevious(),
+                    PageSize = request.PageSize
                 }
             };
 

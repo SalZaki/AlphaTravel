@@ -11,7 +11,7 @@
 
     using Host;
     using Application.Models;
-    using Alpha.Travel.Application.Common.Models;
+    using Application.Common.Models;
 
     public abstract class BaseTest
     {

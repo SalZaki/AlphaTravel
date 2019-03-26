@@ -16,8 +16,17 @@
                 new Destination { Name = "Abu Dhabi", Id = 4, Description = "Modren and fun loving city", CreatedOn = DateTime.UtcNow, CreatedBy = "SeedDataService" }
             };
 
-            context.Destinations.AddRange(destinations);
+            var customers = new[]
+            {
+                new Customer { Firstname = "John",Surname="Richard", Email="test@test.com",Password="password123", Id = 1, CreatedOn = DateTime.UtcNow, CreatedBy = "SeedDataService" },
+                new Customer { Firstname = "Recardo",Surname="Smith", Email="test@test.com",Password="password123", Id = 2, CreatedOn = DateTime.UtcNow, CreatedBy = "SeedDataService" },
+                new Customer { Firstname = "Mike",Surname="Kurt", Email="test@test.com",Password="password123", Id = 3, CreatedOn = DateTime.UtcNow, CreatedBy = "SeedDataService" },
+                new Customer { Firstname = "Sally",Surname="Smith", Email="test@test.com",Password="password123", Id = 4, CreatedOn = DateTime.UtcNow, CreatedBy = "SeedDataService" },
+                new Customer { Firstname = "John",Surname="Richard", Email="test@test.com",Password="password123", Id = 5, CreatedOn = DateTime.UtcNow, CreatedBy = "SeedDataService" }
+            };
 
+            context.Destinations.AddRange(destinations);
+            context.Customers.AddRange(customers);
             context.SaveChanges();
         }
     }

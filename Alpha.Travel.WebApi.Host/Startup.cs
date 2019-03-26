@@ -24,11 +24,8 @@ namespace Alpha.Travel.WebApi.Host
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Filters;
-    using Alpha.Travel.Application.Customers.Queries;
-    using Alpha.Travel.Application.Customers.Validators;
-    using AutoMapper;
-    using Alpha.Travel.Application.Models;
-    using Alpha.Travel.WebApi.Models;
+    using Application.Customers.Queries;
+    using Application.Customers.Validators;
 
     public class Startup
     {
@@ -53,7 +50,6 @@ namespace Alpha.Travel.WebApi.Host
             .SetCompatibilityVersion(CompatibilityVersion.Latest);
 
             services.AddMediatR(typeof(GetDestinationPreviewQueryHandler).GetTypeInfo().Assembly);
-            services.AddAutoMapper();
 
             var dbName = Guid.NewGuid().ToString();
             services.AddDbContext<AlphaTravelDbContext>(options =>
@@ -68,7 +64,6 @@ namespace Alpha.Travel.WebApi.Host
             services.AddMvcCore(options =>
             {
                 options.Filters.AddGlobalExceptionFilters();
-                options.Filters.AddGlobalCustomFilters();
             })
             .AddApiExplorer()
             .AddFormatterMappings()
