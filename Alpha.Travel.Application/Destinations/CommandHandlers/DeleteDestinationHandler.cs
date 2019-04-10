@@ -22,8 +22,7 @@
         }
         public async Task<Unit> Handle(DeleteDestination request, CancellationToken cancellationToken)
         {
-            var id = int.Parse(request.Id);
-            var entity = _context.Destinations.SingleOrDefault(x => x.Id == id);
+            var entity = _context.Destinations.SingleOrDefault(x => x.Id == request.Id);
             if (entity == null)
             {
                 throw new DestinationNotFoundException();

@@ -10,8 +10,6 @@
         public DbSet<Customer> Customers { get; set; }
 
         public AlphaTravelDbContext(DbContextOptions<AlphaTravelDbContext> options)
-            : base(options)
-        {
-        }
+            : base(options) { }
     }
 }

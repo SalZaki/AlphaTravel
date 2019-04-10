@@ -3,6 +3,7 @@
     using System;
     using System.Net.Http;
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Serialization;
     using NUnit.Framework;
 
     [SetUpFixture]
@@ -27,7 +28,8 @@
             MaxRequestTries = 3;
             SerializerSettings = new JsonSerializerSettings
             {
-                NullValueHandling = NullValueHandling.Ignore
+                NullValueHandling = NullValueHandling.Ignore,
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
         }
 

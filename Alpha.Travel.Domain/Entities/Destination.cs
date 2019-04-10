@@ -6,6 +6,8 @@
 
         public string Description { get; set; }
 
+        public DestinationType DestinationType { get; set; }
+
         public Destination() { }
     }
 }

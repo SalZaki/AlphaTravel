@@ -3,6 +3,7 @@
     using Models;
     using MediatR;
     using System;
+    using Common.Models;
 
     public class CreateDestination : IRequest<DestinationPreviewDto>
     {

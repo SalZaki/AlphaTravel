@@ -5,14 +5,15 @@
 
     using MediatR;
     using Models;
+    using AutoMapper;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Options;
-    using Application.Models;
-    using Application.Common.Models;
     using Application.Customers.Queries;
     using Application.Customers.Commands;
+    using System.Collections.Generic;
 
+    //[Authorize]
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:ApiVersion}/[controller]")]
@@ -21,31 +22,42 @@
     {
         private readonly ApiSettings _apiSettings;
         private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
+        private readonly IResponseFactory _responseFactory;
         private readonly string _documentationUrl;
 
-        public CustomersController(IMediator mediator, IOptionsSnapshot<ApiSettings> apiSettings)
+        public CustomersController(
+            IMediator mediator,
+            IMapper mapper,
+            IResponseFactory responseFactory,
+            IOptionsSnapshot<ApiSettings> apiSettings)
         {
             _apiSettings = apiSettings.Value;
             _mediator = mediator;
+            _mapper = mapper;
+            _responseFactory = responseFactory;
             _documentationUrl = _apiSettings.ApiDocumentationUrl.Replace("{VERSION}", "1") + "/customers";
         }
+
         /// <summary>
         /// Retrieve the customer by id.
         /// </summary>
         /// <param name="id">The Id of customer.</param>
         /// <param name="cancellationToken">a cancellation toekn.</param>
         /// <returns>A destination.</returns>
-        [HttpGet("{id}", Name = nameof(GetCustomerByIdAsync))]
-        [ProducesResponseType(typeof(CustomerPreviewDto), StatusCodes.Status200OK)]
+        [HttpGet("{id:int}", Name = nameof(GetCustomerByIdAsync))]
+        [ProducesResponseType(typeof(Response<Customer>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetCustomerByIdAsync(
-            [FromRoute] string id,
+            [FromRoute] int id,
             CancellationToken cancellationToken = default(CancellationToken))
         {
             var query = new GetCustomerPreviewQuery { Id = id };
-            var response = await _mediator.Send(query, cancellationToken).ConfigureAwait(false);
+            var result = await _mediator.Send(query, cancellationToken).ConfigureAwait(false);
+            var customer = _mapper.Map<Customer>(result);
+            var response = _responseFactory.CreateReponse(customer, "Success", "1.0.0");
             return Ok(response);
         }
 
@@ -58,7 +70,7 @@
         /// <param name="cancellationToken">a cancellation toekn.</param>
         /// <returns>A paged collection of customers.</returns>
         [HttpGet(Name = nameof(GetAllCustomersAsync))]
-        [ProducesResponseType(typeof(PagedResult<CustomerPreviewDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PagedResponse<Customer>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -79,19 +91,20 @@
                 Query = searchOptions.Query
             };
 
-            var customers = await _mediator.Send(query, cancellationToken).ConfigureAwait(false);
-
-            return Ok(customers);
+            var result = await _mediator.Send(query, cancellationToken).ConfigureAwait(false);
+            var customers = _mapper.Map<IList<Customer>>(result);
+            var response = _responseFactory.CreatePagedReponse(customers, query, "Success", "1.0.0");
+            return Ok(response);
         }
 
         /// <summary>
-        /// Add a customer
+        /// Adds a customer
         /// </summary>
         /// <param name="command"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         [HttpPost(Name = nameof(AddCustomerAsync))]
-        [ProducesResponseType(typeof(CustomerPreviewDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(Response<Customer>), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> AddCustomerAsync(
@@ -105,16 +118,16 @@
         /// <summary>
         /// Deteles a specified customer
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">customer id</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        [HttpDelete("{id}", Name = nameof(DeleteCustomerByIdAsync))]
+        [HttpDelete("{id:int}", Name = nameof(DeleteCustomerByIdAsync))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteCustomerByIdAsync(
-            [FromRoute]string id,
+            [FromRoute]int id,
             CancellationToken cancellationToken = default(CancellationToken))
         {
             var command = new DeleteCustomer { Id = id };
@@ -127,14 +140,14 @@
         /// <param name="id"></param>
         /// <param name="command"></param>
         /// <param name="cancellationToken"></param>
-        // <returns></returns>
-        [HttpPut("{id}", Name = nameof(UpdateCustomerAsync))]
+        /// <returns></returns>
+        [HttpPut("{id:int}", Name = nameof(UpdateCustomerAsync))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateCustomerAsync(
-            [FromRoute]string id,
+            [FromRoute]int id,
             [FromBody]UpdateCustomer command,
             CancellationToken cancellationToken = default(CancellationToken))
         {

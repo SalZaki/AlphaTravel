@@ -1,8 +1,9 @@
 ﻿namespace Alpha.Travel.Application.Destinations.QueryHandlers
 {
-    using System.Linq;
+    using System;
     using System.Threading;
     using System.Threading.Tasks;
+    using AutoMapper;
 
     using FluentValidation;
     using Microsoft.EntityFrameworkCore;
@@ -12,28 +13,39 @@
     using Models;
     using Exceptions;
     using Common.Handlers;
+    using Domain.Entities;
 
     public class GetDestinationPreviewQueryHandler : BaseValidationHandler<GetDestinationPreviewQuery, DestinationPreviewDto>
     {
+        private readonly IMapper _mapper;
+
         public GetDestinationPreviewQueryHandler(
             AlphaTravelDbContext context,
-            IValidator<GetDestinationPreviewQuery> validator)
-            : base(context, validator) { }
+            IValidator<GetDestinationPreviewQuery> validator,
+            IMapper mapper)
+            : base(context, validator)
+        {
+            _mapper = mapper;
+        }
 
         public override async Task<DestinationPreviewDto> OnHandle(GetDestinationPreviewQuery request, CancellationToken cancellationToken)
         {
-            int id = int.Parse(request.Id);
+            var destination = null as Destination;
+            try
+            {
+                destination = await Context.Destinations.SingleOrDefaultAsync(r => r.Id == request.Id, cancellationToken);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
 
-            var response = await Context.Destinations
-                .Select(DestinationPreviewDto.Projection)
-                .SingleOrDefaultAsync(r => r.Id == id, cancellationToken);
-
-            if (response == null)
+            if (destination == null)
             {
                 throw new DestinationNotFoundException();
             }
 
-            return response;
+            return _mapper.Map<DestinationPreviewDto>(destination);
         }
     }
 }

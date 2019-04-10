@@ -1,30 +1,35 @@
 ﻿namespace Alpha.Travel.Application.Destinations.QueryHandlers
 {
-    using System;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using System.Linq.Dynamic.Core;
 
-    using FluentValidation;
-    using Microsoft.EntityFrameworkCore;
-
-    using Persistence;
     using Queries;
     using Models;
+    using Persistence;
+    using FluentValidation;
+    using Microsoft.EntityFrameworkCore;
     using Common.Handlers;
-    using Common.Models;
-    using Common.Queries;
     using Domain.Entities;
+    using Common.Queries;
+    using System.Collections.Generic;
+    using AutoMapper;
 
-    public class GetDestinationsPreviewQueryHandler : BaseValidationHandler<GetDestinationsPreviewQuery, Common.Models.PagedResult<DestinationPreviewDto>>
+    public class GetDestinationsPreviewQueryHandler : BaseValidationHandler<GetDestinationsPreviewQuery, IList<DestinationPreviewDto>>
     {
+        private readonly IMapper _mapper;
+
         public GetDestinationsPreviewQueryHandler(
             AlphaTravelDbContext context,
-            IValidator<GetDestinationsPreviewQuery> validator)
-            : base(context, validator) { }
+            IValidator<GetDestinationsPreviewQuery> validator,
+            IMapper mapper)
+            : base(context, validator)
+        {
+            _mapper = mapper;
+        }
 
-        public override async Task<Common.Models.PagedResult<DestinationPreviewDto>> OnHandle(GetDestinationsPreviewQuery request, CancellationToken cancellationToken)
+        public override async Task<IList<DestinationPreviewDto>> OnHandle(GetDestinationsPreviewQuery request, CancellationToken cancellationToken)
         {
             var query = Context.Destinations as IQueryable<Destination>;
 
@@ -43,26 +48,11 @@
             var count = await query.CountAsync(cancellationToken);
 
             var destinations = await query
-                .Select(DestinationPreviewDto.Projection)
                 .Skip(request.PageSize * (request.PageNumber - 1))
                 .Take(request.PageSize)
                 .ToListAsync(cancellationToken);
 
-            var response = new Common.Models.PagedResult<DestinationPreviewDto>
-            {
-                Data = destinations,
-                MetaData = new MetaData
-                {
-                    TotalRecords = count,
-                    PageCount = request.GetTotalPages(count),
-                    PageNumber = request.PageNumber,
-                    HasNext = request.HasNext(count),
-                    HasPrevious = request.HasPrevious(),
-                    PageSize = request.PageSize
-                }
-            };
-
-            return response;
+            return _mapper.Map<IList<DestinationPreviewDto>>(destinations);
         }
     }
 }

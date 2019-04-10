@@ -1,0 +1,51 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "name": "London",
+      "description": "Capital city of UK",
+      "modified_on": "0001-01-01T00:00:00Z",
+      "modified_by": null,
+      "created_on": "2019-04-10T11:31:56Z",
+      "created_by": "SeedDataService"
+    },
+    {
+      "id": 2,
+      "name": "New York",
+      "description": "Fast paced and fun",
+      "modified_on": "0001-01-01T00:00:00Z",
+      "modified_by": null,
+      "created_on": "2019-04-10T11:31:56Z",
+      "created_by": "SeedDataService"
+    },
+    {
+      "id": 3,
+      "name": "Sydney",
+      "description": "Modren and fun loving city",
+      "modified_on": "0001-01-01T00:00:00Z",
+      "modified_by": null,
+      "created_on": "2019-04-10T11:31:56Z",
+      "created_by": "SeedDataService"
+    },
+    {
+      "id": 4,
+      "name": "Dubai",
+      "description": "Shopping and holidays fun city",
+      "modified_on": "0001-01-01T00:00:00Z",
+      "modified_by": null,
+      "created_on": "2019-04-10T11:31:56Z",
+      "created_by": "SeedDataService"
+    }
+  ],
+  "meta_data": {},
+  "pagination": {
+    "total_records": 4,
+    "page_count": 1,
+    "page_number": 1,
+    "page_size": 20,
+    "has_next": false,
+    "has_previous": false
+  },
+  "status": "Success",
+  "version": "1.0.0"
+}

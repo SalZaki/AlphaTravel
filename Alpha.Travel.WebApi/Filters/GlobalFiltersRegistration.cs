@@ -1,9 +1,11 @@
 ﻿namespace Alpha.Travel.WebApi.Filters
 {
-    using Exceptions;
-    using Exceptions.Destinations;
     using Microsoft.AspNetCore.Mvc.Filters;
     using System.Diagnostics.CodeAnalysis;
+
+    using Exceptions;
+    using Exceptions.Destination;
+    using Exceptions.Customer;
 
     [ExcludeFromCodeCoverage]
     public static class GlobalFiltersRegistration

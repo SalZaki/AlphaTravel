@@ -3,10 +3,11 @@
     using Models;
     using MediatR;
     using System;
+    using Common.Models;
 
     public class CreateCustomer : IRequest<CustomerPreviewDto>
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         public string Firstname { get; set; }
 

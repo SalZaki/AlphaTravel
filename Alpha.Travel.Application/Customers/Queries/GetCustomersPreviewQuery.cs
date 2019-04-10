@@ -2,8 +2,11 @@
 {
     using MediatR;
     using Models;
-    using Common.Models;
     using Common.Queries;
+    using System.Collections.Generic;
 
-    public class GetCustomersPreviewQuery : BaseGetPreviewQuery, IRequest<PagedResult<CustomerPreviewDto>> { }
+    public class GetCustomersPreviewQuery : BaseGetPreviewQuery, IRequest<IList<CustomerPreviewDto>>
+    {
+
+    }
 }

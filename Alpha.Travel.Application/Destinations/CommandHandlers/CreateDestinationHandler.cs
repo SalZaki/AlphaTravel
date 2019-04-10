@@ -6,9 +6,9 @@
     using Destinations.Commands;
     using Models;
     using MediatR;
-    using System;
     using System.Threading;
     using System.Threading.Tasks;
+    using Common.Models;
 
     public class CreateDestinationHandler : IRequestHandler<CreateDestination, DestinationPreviewDto>
     {
@@ -37,7 +37,7 @@
 
             _context.Destinations.Add(entity);
             await _context.SaveChangesAsync(cancellationToken);
-            return await _mediator.Send(new GetDestinationPreviewQuery() { Id = entity.Id.ToString() });
+            return await _mediator.Send(new GetDestinationPreviewQuery() { Id = entity.Id });
         }
     }
 }

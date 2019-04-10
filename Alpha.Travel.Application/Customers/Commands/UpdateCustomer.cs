@@ -5,7 +5,7 @@
 
     public class UpdateCustomer : IRequest
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         public string Firstname { get; set; }
 

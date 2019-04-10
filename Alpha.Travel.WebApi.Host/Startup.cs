@@ -10,22 +10,23 @@ namespace Alpha.Travel.WebApi.Host
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc.Infrastructure;
     using Microsoft.AspNetCore.Mvc.Routing;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.Extensions.Options;
     using Microsoft.AspNetCore.Mvc.ApiExplorer;
     using Swashbuckle.AspNetCore.SwaggerGen;
+    using Filters;
     using FluentValidation;
     using MediatR;
     using Persistence;
+    using AutoMapper;
+    using Application.Customers.Queries;
+    using Application.Customers.Validators;
     using Application.Destinations.QueryHandlers;
     using Application.Destinations.Validators;
     using Application.Destinations.Queries;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Authentication.JwtBearer;
-    using Filters;
-    using Application.Customers.Queries;
-    using Application.Customers.Validators;
 
     public class Startup
     {
@@ -37,6 +38,15 @@ namespace Alpha.Travel.WebApi.Host
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAllOrigins",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
+            });
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 options.CheckConsentNeeded = context => true;
@@ -50,6 +60,7 @@ namespace Alpha.Travel.WebApi.Host
             .SetCompatibilityVersion(CompatibilityVersion.Latest);
 
             services.AddMediatR(typeof(GetDestinationPreviewQueryHandler).GetTypeInfo().Assembly);
+            services.AddAutoMapper();
 
             var dbName = Guid.NewGuid().ToString();
             services.AddDbContext<AlphaTravelDbContext>(options =>
@@ -99,6 +110,7 @@ namespace Alpha.Travel.WebApi.Host
                 options.SubstituteApiVersionInUrl = true;
             });
 
+            services.AddSingleton<IResponseFactory, ResponseFactory>();
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, SwaggerConfigureOptions>();
             services.AddTransient<IValidator<GetDestinationsPreviewQuery>, GetDestinationsPreviewQueryValidator>();
             services.AddTransient<IValidator<GetDestinationPreviewQuery>, GetDestinationPreviewQueryValidator>();
@@ -147,8 +159,8 @@ namespace Alpha.Travel.WebApi.Host
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseCors("AllowAllOrigins");
             app.UseMvc();
-            app.UseCors("CorsPolicy");
             app.UseAuthentication();
             app.UseSwagger();
             app.UseSwaggerUI(options =>

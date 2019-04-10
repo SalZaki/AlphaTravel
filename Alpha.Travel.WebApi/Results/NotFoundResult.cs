@@ -6,7 +6,7 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Newtonsoft.Json;
-    using Application.Common.Models;
+    using Models;
 
     [ExcludeFromCodeCoverage]
     public sealed class NotFoundResult : IActionResult

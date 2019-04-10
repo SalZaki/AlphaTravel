@@ -10,7 +10,6 @@
         public static void Main(string[] args)
         {
             var host = CreateWebHostBuilder(args).Build();
-
             using (var scope = host.Services.CreateScope())
             {
                 try
@@ -18,12 +17,8 @@
                     var context = scope.ServiceProvider.GetService<AlphaTravelDbContext>();
                     AlphaTravelDbContextInitializer.Initialize(context);
                 }
-                catch
-                {
-
-                }
+                catch { }
             }
-
             host.Run();
         }
 

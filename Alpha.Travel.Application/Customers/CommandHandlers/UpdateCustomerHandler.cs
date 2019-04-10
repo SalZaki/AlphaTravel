@@ -19,10 +19,7 @@
 
         public async Task<Unit> Handle(UpdateCustomer request, CancellationToken cancellationToken)
         {
-            var id = int.Parse(request.Id);
-
-
-            var entity = _context.Customers.SingleOrDefault(x => x.Id == id);
+            var entity = _context.Customers.SingleOrDefault(x => x.Id == request.Id);
             if (entity == null)
             {
                 throw new CustomerNotFoundException();
@@ -36,9 +33,7 @@
             entity.Surname = request.Surname;
 
             _context.Customers.Update(entity);
-
             await _context.SaveChangesAsync(cancellationToken);
-
             return Unit.Value;
         }
     }

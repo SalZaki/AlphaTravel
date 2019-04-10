@@ -5,13 +5,13 @@
 
     using MediatR;
     using Models;
+    using AutoMapper;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Options;
     using Application.Destinations.Commands;
     using Application.Destinations.Queries;
-    using Application.Models;
-    using Application.Common.Models;
+    using System.Collections.Generic;
 
     //[Authorize]
     [ApiController]
@@ -22,14 +22,20 @@
     {
         private readonly ApiSettings _apiSettings;
         private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
+        private readonly IResponseFactory _responseFactory;
         private readonly string _documentationUrl;
 
         public DestinationsController(
             IMediator mediator,
+            IMapper mapper,
+            IResponseFactory responseFactory,
             IOptionsSnapshot<ApiSettings> apiSettings)
         {
             _apiSettings = apiSettings.Value;
             _mediator = mediator;
+            _mapper = mapper;
+            _responseFactory = responseFactory;
             _documentationUrl = _apiSettings.ApiDocumentationUrl.Replace("{VERSION}", "1") + "/destinations";
         }
 
@@ -40,16 +46,18 @@
         /// <param name="cancellationToken">a cancellation toekn.</param>
         /// <returns>A destination.</returns>
         [HttpGet("{id}", Name = nameof(GetDestinationByIdAsync))]
-        [ProducesResponseType(typeof(DestinationPreviewDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Response<Destination>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetDestinationByIdAsync(
-            [FromRoute] string id,
+            [FromRoute] int id,
             CancellationToken cancellationToken = default(CancellationToken))
         {
             var query = new GetDestinationPreviewQuery { Id = id };
-            var response = await _mediator.Send(query, cancellationToken).ConfigureAwait(false);
+            var result = await _mediator.Send(query, cancellationToken).ConfigureAwait(false);
+            var customer = _mapper.Map<Destination>(result);
+            var response = _responseFactory.CreateReponse(customer, "Success", "1.0.0");
             return Ok(response);
         }
 
@@ -62,7 +70,7 @@
         /// <param name="cancellationToken">a cancellation toekn.</param>
         /// <returns>A paged collection of destinations.</returns>
         [HttpGet(Name = nameof(GetAllDestinationsAsync))]
-        [ProducesResponseType(typeof(PagedResult<DestinationPreviewDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PagedResponse<Destination>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -83,9 +91,10 @@
                 Query = searchOptions.Query
             };
 
-            var destinations = await _mediator.Send(query, cancellationToken).ConfigureAwait(false);
-
-            return Ok(destinations);
+            var result = await _mediator.Send(query, cancellationToken).ConfigureAwait(false);
+            var destinations = _mapper.Map<IList<Destination>>(result);
+            var response = _responseFactory.CreatePagedReponse(destinations, query, "Success", "1.0.0");
+            return Ok(response);
         }
 
         /// <summary>
@@ -95,7 +104,7 @@
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         [HttpPost(Name = nameof(AddDestinationAsync))]
-        [ProducesResponseType(typeof(DestinationPreviewDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(Response<Destination>), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> AddDestinationAsync(
@@ -112,13 +121,13 @@
         /// <param name="id"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        [HttpDelete("{id}", Name = nameof(DeleteDestinationAsync))]
+        [HttpDelete("{id:int}", Name = nameof(DeleteDestinationAsync))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteDestinationAsync(
-            [FromRoute]string id,
+            [FromRoute]int id,
             CancellationToken cancellationToken = default(CancellationToken))
         {
             var command = new DeleteDestination { Id = id };

@@ -5,7 +5,6 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    using Application.Models;
     using NUnit.Framework;
     using FluentAssertions;
     using MediatR;
@@ -15,7 +14,9 @@
     using Models;
     using Microsoft.Extensions.Options;
     using Application.Customers.Queries;
-    using Application.Common.Models;
+    using Application.Customers.Models;
+    using AutoMapper;
+    using Alpha.Travel.Application.Common.Queries;
 
     [TestFixture]
     public class CustomersControllerTest : BaseTest
@@ -25,9 +26,11 @@
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
+            var mockMapper = new Mock<IMapper>();
+            var mockResponseFactory = new Mock<IResponseFactory>();
             var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
             mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
-            var sut = new CustomersController(mockMediator.Object, mockApiSettings.Object);
+            var sut = new CustomersController(mockMediator.Object, mockMapper.Object, mockResponseFactory.Object, mockApiSettings.Object);
 
             // Act
             var attributes = sut.GetAttributesOn(x => x.GetAllCustomersAsync(
@@ -46,9 +49,11 @@
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
+            var mockMapper = new Mock<IMapper>();
+            var mockResponseFactory = new Mock<IResponseFactory>();
             var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
             mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
-            var sut = new CustomersController(mockMediator.Object, mockApiSettings.Object);
+            var sut = new CustomersController(mockMediator.Object, mockMapper.Object, mockResponseFactory.Object, mockApiSettings.Object);
             var expectedStatusCode = 200;
 
             // Act
@@ -69,9 +74,11 @@
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
+            var mockMapper = new Mock<IMapper>();
+            var mockResponseFactory = new Mock<IResponseFactory>();
             var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
             mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
-            var sut = new CustomersController(mockMediator.Object, mockApiSettings.Object);
+            var sut = new CustomersController(mockMediator.Object, mockMapper.Object, mockResponseFactory.Object, mockApiSettings.Object);
             var expectedTyped = typeof(IEnumerable<CustomerPreviewDto>);
 
             // Act
@@ -92,9 +99,11 @@
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
+            var mockMapper = new Mock<IMapper>();
+            var mockResponseFactory = new Mock<IResponseFactory>();
             var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
             mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
-            var sut = new CustomersController(mockMediator.Object, mockApiSettings.Object);
+            var sut = new CustomersController(mockMediator.Object, mockMapper.Object, mockResponseFactory.Object, mockApiSettings.Object);
             var expectedStatusCode = 204;
 
             // Act
@@ -115,9 +124,11 @@
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
+            var mockMapper = new Mock<IMapper>();
+            var mockResponseFactory = new Mock<IResponseFactory>();
             var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
             mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
-            var sut = new CustomersController(mockMediator.Object, mockApiSettings.Object);
+            var sut = new CustomersController(mockMediator.Object, mockMapper.Object, mockResponseFactory.Object, mockApiSettings.Object);
             var expectedStatusCode = 404;
 
             // Act
@@ -138,9 +149,11 @@
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
+            var mockMapper = new Mock<IMapper>();
+            var mockResponseFactory = new Mock<IResponseFactory>();
             var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
             mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
-            var sut = new CustomersController(mockMediator.Object, mockApiSettings.Object);
+            var sut = new CustomersController(mockMediator.Object, mockMapper.Object, mockResponseFactory.Object, mockApiSettings.Object);
             var expectedStatusCode = 400;
 
             // Act
@@ -161,10 +174,12 @@
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
+            var mockMapper = new Mock<IMapper>();
+            var mockResponseFactory = new Mock<IResponseFactory>();
             var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
             mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
-            var sut = new CustomersController(mockMediator.Object, mockApiSettings.Object);
-            var customerId = "1";
+            var sut = new CustomersController(mockMediator.Object, mockMapper.Object, mockResponseFactory.Object, mockApiSettings.Object);
+            var customerId = 1;
 
             // Act
             await sut.GetCustomerByIdAsync(customerId, default(CancellationToken));
@@ -179,10 +194,12 @@
             // Arrange
             var mockMediator = new Mock<IMediator>();
             mockMediator.Setup(x => x.Send(It.IsAny<GetCustomerPreviewQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Customer);
+            var mockMapper = new Mock<IMapper>();
+            var mockResponseFactory = new Mock<IResponseFactory>();
             var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
             mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
-            var sut = new CustomersController(mockMediator.Object, mockApiSettings.Object);
-            var customerId = "1";
+            var sut = new CustomersController(mockMediator.Object, mockMapper.Object, mockResponseFactory.Object, mockApiSettings.Object);
+            var customerId = 1;
 
             // Act
             var result = await sut.GetCustomerByIdAsync(customerId, default(CancellationToken));
@@ -198,9 +215,11 @@
             // Arrange
             var mockMediator = new Mock<IMediator>();
             mockMediator.Setup(x => x.Send(It.IsAny<GetCustomersPreviewQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Customers);
+            var mockMapper = new Mock<IMapper>();
+            var mockResponseFactory = new Mock<IResponseFactory>();
             var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
             mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
-            var sut = new CustomersController(mockMediator.Object, mockApiSettings.Object);
+            var sut = new CustomersController(mockMediator.Object, mockMapper.Object, mockResponseFactory.Object, mockApiSettings.Object);
 
             var pagingOptions = new PagingOptions
             {
@@ -232,9 +251,12 @@
             // Arrange
             var mockMediator = new Mock<IMediator>();
             mockMediator.Setup(x => x.Send(It.IsAny<GetCustomersPreviewQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Customers);
+            var mockMapper = new Mock<IMapper>();
+            var mockResponseFactory = new Mock<IResponseFactory>();
             var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
             mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
-            var sut = new CustomersController(mockMediator.Object, mockApiSettings.Object);
+            var sut = new CustomersController(mockMediator.Object, mockMapper.Object, mockResponseFactory.Object, mockApiSettings.Object);
+
             var pagingOptions = new PagingOptions
             {
                 PageNumber = 1,
@@ -264,9 +286,13 @@
             // Arrange
             var mockMediator = new Mock<IMediator>();
             mockMediator.Setup(x => x.Send(It.IsAny<GetCustomersPreviewQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Customers);
+            var mapper = Mapper;
+            var mockResponseFactory = new Mock<IResponseFactory>();
+            mockResponseFactory.Setup(x => x.CreatePagedReponse(It.IsAny<IList<Customer>>(), It.IsAny<IPreviewQuery>(), It.IsAny<string>(), It.IsAny<string>())).Returns(PagedCustomers);
             var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
             mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
-            var sut = new CustomersController(mockMediator.Object, mockApiSettings.Object);
+            var sut = new CustomersController(mockMediator.Object, mapper, mockResponseFactory.Object, mockApiSettings.Object);
+
             var pagingOptions = new PagingOptions
             {
                 PageNumber = 1,
@@ -290,7 +316,7 @@
             var response = result.Should().BeOfType<OkObjectResult>().Subject;
             response.StatusCode.Should().Equals(200);
 
-            var customers = response.Value.Should().BeAssignableTo<PagedResult<CustomerPreviewDto>>().Subject;
+            var customers = response.Value.Should().BeAssignableTo<PagedResponse<Customer>>().Subject;
             customers.Data.Select(x => x.Id == 1).Should().NotBeNull();
             customers.Data.Select(x => x.Firstname == "Jason").Should().NotBeNull();
             customers.Data.Count().Should().Equals(3);

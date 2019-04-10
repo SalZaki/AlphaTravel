@@ -3,6 +3,7 @@
     using Models;
     using MediatR;
     using Common.Queries;
+    using System.Collections.Generic;
 
-    public class GetDestinationsPreviewQuery : BaseGetPreviewQuery, IRequest<Common.Models.PagedResult<DestinationPreviewDto>> { }
+    public class GetDestinationsPreviewQuery : BaseGetPreviewQuery, IRequest<IList<DestinationPreviewDto>> { }
 }

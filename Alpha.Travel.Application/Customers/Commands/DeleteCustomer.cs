@@ -4,6 +4,6 @@
 
     public class DeleteCustomer : IRequest
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
     }
 }

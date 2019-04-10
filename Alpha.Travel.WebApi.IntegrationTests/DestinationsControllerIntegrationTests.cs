@@ -10,7 +10,7 @@
     using NUnit.Framework;
     using Newtonsoft.Json;
     using FluentAssertions;
-    using ClientSDK.Models.Response;
+    using Models;
 
     [TestFixture]
     public sealed class DestinationsControllerIntegrationTests : AlphaTravelTestWebApplicationFactory
@@ -35,7 +35,7 @@
             var response = await Client.GetAsync(_destinationsEndpoint, CancellationToken.None);
             response.EnsureSuccessStatusCode();
             var stringResponse = await response.Content.ReadAsStringAsync();
-            var destinations = JsonConvert.DeserializeObject<PagedResult<Destination>>(stringResponse);
+            var destinations = JsonConvert.DeserializeObject<PagedResponse<Destination>>(stringResponse);
 
             // Assert
             Assert.Contains(destinations.Data.Where(d => d.Name == "London").FirstOrDefault(), destinations.Data.ToList());
@@ -59,11 +59,11 @@
             var response = await Client.GetAsync($"{_destinationsEndpoint}/?pageSize=50&pageNumber=1", CancellationToken.None);
             response.EnsureSuccessStatusCode();
             var stringResponse = await response.Content.ReadAsStringAsync();
-            var destinations = JsonConvert.DeserializeObject<PagedResult<Destination>>(stringResponse);
+            var destinations = JsonConvert.DeserializeObject<PagedResponse<Destination>>(stringResponse);
 
             // Assert
-            destinations.MetaData.PageNumber.Should().Equals(1);
-            destinations.MetaData.PageSize.Should().Equals(50);
+            destinations.Pagination.PageNumber.Should().Equals(1);
+            destinations.Pagination.PageSize.Should().Equals(50);
         }
 
         [Test]
@@ -85,10 +85,10 @@
             response.EnsureSuccessStatusCode();
 
             var stringResponse = await response.Content.ReadAsStringAsync();
-            var destination = JsonConvert.DeserializeObject<Destination>(stringResponse);
+            var destination = JsonConvert.DeserializeObject<Response<Destination>>(stringResponse);
 
             // Assert
-            Assert.AreEqual(destination.Name, "London");
+            Assert.AreEqual(destination.Data.Name, "London");
         }
 
         [Test]

@@ -1,0 +1,180 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "first_name": "John",
+      "surname": "Richard",
+      "password": "password123",
+      "email": "test@test.com",
+      "modified_on": "0001-01-01T00:00:00Z",
+      "modified_by": null,
+      "created_on": "2019-04-10T11:18:35Z",
+      "created_by": "SeedDataService"
+    },
+    {
+      "id": 2,
+      "first_name": "Recardo",
+      "surname": "Smith",
+      "password": "password123",
+      "email": "test@test.com",
+      "modified_on": "0001-01-01T00:00:00Z",
+      "modified_by": null,
+      "created_on": "2019-04-10T11:18:35Z",
+      "created_by": "SeedDataService"
+    },
+    {
+      "id": 3,
+      "first_name": "Mike",
+      "surname": "Kurt",
+      "password": "password123",
+      "email": "test@test.com",
+      "modified_on": "0001-01-01T00:00:00Z",
+      "modified_by": null,
+      "created_on": "2019-04-10T11:18:35Z",
+      "created_by": "SeedDataService"
+    },
+    {
+      "id": 4,
+      "first_name": "Sally",
+      "surname": "Smith",
+      "password": "password123",
+      "email": "test@test.com",
+      "modified_on": "0001-01-01T00:00:00Z",
+      "modified_by": null,
+      "created_on": "2019-04-10T11:18:35Z",
+      "created_by": "SeedDataService"
+    },
+    {
+      "id": 5,
+      "first_name": "John",
+      "surname": "Richard",
+      "password": "password123",
+      "email": "test@test.com",
+      "modified_on": "0001-01-01T00:00:00Z",
+      "modified_by": null,
+      "created_on": "2019-04-10T11:18:35Z",
+      "created_by": "SeedDataService"
+    },
+    {
+      "id": 6,
+      "first_name": "John",
+      "surname": "Richard",
+      "password": "password123",
+      "email": "test@test.com",
+      "modified_on": "0001-01-01T00:00:00Z",
+      "modified_by": null,
+      "created_on": "2019-04-10T11:18:35Z",
+      "created_by": "SeedDataService"
+    },
+    {
+      "id": 7,
+      "first_name": "Recardo",
+      "surname": "Smith",
+      "password": "password123",
+      "email": "test@test.com",
+      "modified_on": "0001-01-01T00:00:00Z",
+      "modified_by": null,
+      "created_on": "2019-04-10T11:18:35Z",
+      "created_by": "SeedDataService"
+    },
+    {
+      "id": 8,
+      "first_name": "Mike",
+      "surname": "Kurt",
+      "password": "password123",
+      "email": "test@test.com",
+      "modified_on": "0001-01-01T00:00:00Z",
+      "modified_by": null,
+      "created_on": "2019-04-10T11:18:35Z",
+      "created_by": "SeedDataService"
+    },
+    {
+      "id": 9,
+      "first_name": "Sally",
+      "surname": "Smith",
+      "password": "password123",
+      "email": "test@test.com",
+      "modified_on": "0001-01-01T00:00:00Z",
+      "modified_by": null,
+      "created_on": "2019-04-10T11:18:35Z",
+      "created_by": "SeedDataService"
+    },
+    {
+      "id": 10,
+      "first_name": "John",
+      "surname": "Richard",
+      "password": "password123",
+      "email": "test@test.com",
+      "modified_on": "0001-01-01T00:00:00Z",
+      "modified_by": null,
+      "created_on": "2019-04-10T11:18:35Z",
+      "created_by": "SeedDataService"
+    },
+    {
+      "id": 11,
+      "first_name": "John",
+      "surname": "Richard",
+      "password": "password123",
+      "email": "test@test.com",
+      "modified_on": "0001-01-01T00:00:00Z",
+      "modified_by": null,
+      "created_on": "2019-04-10T11:18:35Z",
+      "created_by": "SeedDataService"
+    },
+    {
+      "id": 12,
+      "first_name": "Recardo",
+      "surname": "Smith",
+      "password": "password123",
+      "email": "test@test.com",
+      "modified_on": "0001-01-01T00:00:00Z",
+      "modified_by": null,
+      "created_on": "2019-04-10T11:18:35Z",
+      "created_by": "SeedDataService"
+    },
+    {
+      "id": 13,
+      "first_name": "Mike",
+      "surname": "Kurt",
+      "password": "password123",
+      "email": "test@test.com",
+      "modified_on": "0001-01-01T00:00:00Z",
+      "modified_by": null,
+      "created_on": "2019-04-10T11:18:35Z",
+      "created_by": "SeedDataService"
+    },
+    {
+      "id": 14,
+      "first_name": "Sally",
+      "surname": "Smith",
+      "password": "password123",
+      "email": "test@test.com",
+      "modified_on": "0001-01-01T00:00:00Z",
+      "modified_by": null,
+      "created_on": "2019-04-10T11:18:35Z",
+      "created_by": "SeedDataService"
+    },
+    {
+      "id": 15,
+      "first_name": "John",
+      "surname": "Richard",
+      "password": "password123",
+      "email": "test@test.com",
+      "modified_on": "0001-01-01T00:00:00Z",
+      "modified_by": null,
+      "created_on": "2019-04-10T11:18:35Z",
+      "created_by": "SeedDataService"
+    }
+  ],
+  "meta_data": {},
+  "pagination": {
+    "total_records": 15,
+    "page_count": 1,
+    "page_number": 1,
+    "page_size": 20,
+    "has_next": false,
+    "has_previous": false
+  },
+  "status": "Success",
+  "version": "1.0.0"
+}
