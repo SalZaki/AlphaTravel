@@ -139,6 +139,7 @@
             {
                 cfg.AddProfiles(typeof(CustomerMappings).GetTypeInfo().Assembly);
                 cfg.AddProfiles(typeof(DestinationMappings).GetTypeInfo().Assembly);
+                cfg.ValidateInlineMaps = false;
             });
 
             return mapperConfig.CreateMapper();

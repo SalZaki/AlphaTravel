@@ -1,14 +1,15 @@
 ﻿namespace Alpha.Travel.WebApi.Mappings
 {
-    using Alpha.Travel.Application.Customers.Models;
-    using Alpha.Travel.WebApi.Models;
     using AutoMapper;
+    using Alpha.Travel.WebApi.Models;
+    using Alpha.Travel.Application.Customers.Models;
 
     public class CustomerMappings : Profile
     {
         public CustomerMappings()
         {
-            CreateMap<Customer, CustomerPreviewDto>().ReverseMap();
+            CreateMap<CustomerPreviewDto, Customer>();
+            CreateMap<Customer, CustomerPreviewDto>();
         }
     }
 }

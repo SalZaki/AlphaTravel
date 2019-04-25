@@ -17,12 +17,13 @@
     using Application.Destinations.Queries;
     using AutoMapper;
     using Alpha.Travel.Application.Common.Queries;
+    using System;
 
     [TestFixture]
     public class DestinationsControllerTest : BaseTest
     {
         [Test]
-        public void GetAllAsync_Has_HttpGet_Attribute()
+        public void GetAllAsync_Has_Route_Attribute()
         {
             // Arrange
             var mockMediator = new Mock<IMediator>();
@@ -37,7 +38,7 @@
                 It.IsAny<PagingOptions>(),
                 It.IsAny<SortOptions>(),
                 It.IsAny<SearchOptions>(),
-                It.IsAny<CancellationToken>())).OfType<HttpGetAttribute>().SingleOrDefault();
+                It.IsAny<CancellationToken>())).OfType<RouteAttribute>().SingleOrDefault();
 
             // Assert
             attributes.Should().NotBeNull();
@@ -288,7 +289,7 @@
             mockMediator.Setup(x => x.Send(It.IsAny<GetDestinationsPreviewQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Destinations);
             var mapper = Mapper;
             var mockResponseFactory = new Mock<IResponseFactory>();
-            mockResponseFactory.Setup(x => x.CreatePagedReponse(It.IsAny<IList<Destination>>(), It.IsAny<IPreviewQuery>(), It.IsAny<string>(), It.IsAny<string>())).Returns(PagedDestinations);
+            mockResponseFactory.Setup(x => x.CreatePagedReponse(It.IsAny<IList<Destination>>(), It.IsAny<Type>(), It.IsAny<IPreviewQuery>(), It.IsAny<ResponseStatus>(), It.IsAny<string>())).Returns(PagedDestinations);
             var mockApiSettings = new Mock<IOptionsSnapshot<ApiSettings>>();
             mockApiSettings.SetupGet(x => x.Value).Returns(ApiSettings);
             var sut = new DestinationsController(mockMediator.Object, mapper, mockResponseFactory.Object, mockApiSettings.Object);

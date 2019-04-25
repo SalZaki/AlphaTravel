@@ -1,6 +1,7 @@
 ﻿namespace Alpha.Travel.WebApi.Models
 {
     using Newtonsoft.Json;
+    using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
 
     [ExcludeFromCodeCoverage]

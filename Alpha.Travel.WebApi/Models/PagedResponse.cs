@@ -11,7 +11,7 @@
         public IEnumerable<T> Data { get; set; }
 
         [JsonProperty(Order = -4, PropertyName = "meta_data")]
-        public MetaData Metadata { get; set; }
+        public IEnumerable<MetaData> Metadata { get; set; }
 
         [JsonProperty(Order = -3, PropertyName = "pagination")]
         public Pagination Pagination { get; set; }

@@ -1,124 +1,96 @@
 ﻿namespace Alpha.Travel.WebApi
 {
+    using System;
+    using System.Linq;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+
     using Alpha.Travel.WebApi.Models;
     using Alpha.Travel.Application.Common.Queries;
-    using System.Collections.Generic;
 
-    public interface IResponseFactory
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Routing;
+
+    public sealed class ResponseFactory : IResponseFactory
     {
-        Response<T> CreateReponse<T>(T dto, string status, string version) where T : class;
+        private readonly ILinkFactoryProvider _linkFactoryProvider;
+        private readonly ILinkFactory _linkFactory;
 
-        PagedResponse<T> CreatePagedReponse<T>(IList<T> dto, IPreviewQuery query, string status, string version) where T : class;
-    }
-
-    public class ResponseFactory : IResponseFactory
-    {
-        public Response<T> CreateReponse<T>(T dto,
-            string status,
-            string version) where T : class
+        public ResponseFactory(ILinkFactoryProvider linkFactoryProvider)
         {
+            _linkFactoryProvider = linkFactoryProvider ?? throw new ArgumentNullException(nameof(linkFactoryProvider));
+            _linkFactory = _linkFactoryProvider.GetLinkFactory();
+        }
+
+        private List<LinkAttribute> GetLinkAttributes(Type type)
+        {
+            var methods = type
+                .GetMethods()
+                .Where(x => x.ReturnType == typeof(Task<IActionResult>))
+                .ToList();
+
+            var linkAttributes = new List<LinkAttribute>();
+
+            methods.ForEach(m =>
+            {
+                var routeAttribute = m.GetCustomAttributes(typeof(RouteAttribute), false).SingleOrDefault() as RouteAttribute;
+                var httpMethodAttribute = m.GetCustomAttributes(typeof(HttpMethodAttribute), false).SingleOrDefault() as HttpMethodAttribute;
+                linkAttributes.Add(new LinkAttribute
+                {
+                    HttpMethodAttribute = httpMethodAttribute,
+                    RouteAttribute = routeAttribute
+                });
+            });
+
+            return linkAttributes;
+        }
+
+        public Response<T> CreateReponse<T>(T dto, Type type, ResponseStatus status, string version) where T : BaseModel
+        {
+            var linkAttributes = GetLinkAttributes(type);
+            linkAttributes.ForEach(l => l.Id = dto.Id);
+            var links = _linkFactory.CreateLinks(linkAttributes);
+            dto.AddLinks(links);
+
             return new Response<T>
             {
                 Data = dto,
-                Status = status,
+                Status = status.ToString(),
                 Version = version
             };
         }
 
-        public PagedResponse<T> CreatePagedReponse<T>(IList<T> dto,
+        public PagedResponse<T> CreatePagedReponse<T>(IList<T> data,
+            Type type,
             IPreviewQuery query,
-            string status,
-            string version) where T : class
+            ResponseStatus status,
+            string version) where T : BaseModel
         {
+            var linkAttributes = GetLinkAttributes(type);
+
+            data.ToList().ForEach(d =>
+            {
+                linkAttributes.ForEach(l => l.Id = d.Id);
+                var links = _linkFactory.CreateLinks(linkAttributes);
+                d.AddLinks(links);
+            });
+
             return new PagedResponse<T>
             {
-                Data = dto,
+                Data = data,
                 Pagination = new Pagination
                 {
-                    TotalRecords = dto.Count,
-                    PageCount = query.GetTotalPages(dto.Count),
+                    TotalRecords = data.Count,
+                    PageCount = query.GetTotalPages(data.Count),
                     PageNumber = query.PageNumber,
-                    HasNext = query.HasNext(dto.Count),
+                    HasNext = query.HasNext(data.Count),
                     HasPrevious = query.HasPrevious(),
                     PageSize = query.PageSize
                 },
-                Status = status,
+                Status = status.ToString(),
                 Version = version,
-                Metadata = new MetaData
-                {
-                   
-                }
+                Metadata = new List<MetaData>()
             };
         }
     }
-
-    //[ExcludeFromCodeCoverage]
-    //public static class ResponseFactory
-    //{
-    //    private readonly IMapper _mapper;
-
-    //    public ResponseFactory(IMapper mapper)
-    //    {
-    //        _mapper = mapper;
-    //    }
-
-    //    public Response<Customer> CreateCustomerReponse(CustomerPreviewDto dto)
-    //    {
-    //        return new Response<Customer>
-    //        {
-    //            Data = _mapper.Map<Customer>(dto),
-    //            Status = "success",
-    //            Version = "1.0.0"
-    //        };
-    //    }
-
-    //    public static Response<Destination> CreateDestinationReponse<T>(DestinationPreviewDto dto) where T : class
-    //    {
-    //        return new Response<T>();
-    //    }
-
-    //    public static PagedResponse<T> CreatePagedCustomerReponse<T>(IList<CustomerPreviewDto> dto,
-    //        IMapper mapper,
-    //        IPreviewQuery query,
-    //        string version) where T : class
-    //    {
-    //        return new PagedResponse<T>
-    //        {
-    //            Data = mapper.Map<IList<T>>(dto),
-    //            Pagination = new Pagination
-    //            {
-    //                TotalRecords = dto.Count,
-    //                PageCount = query.GetTotalPages(dto.Count),
-    //                PageNumber = query.PageNumber,
-    //                HasNext = query.HasNext(dto.Count),
-    //                HasPrevious = query.HasPrevious(),
-    //                PageSize = query.PageSize
-    //            },
-    //            Status = status,
-    //            Version = version
-    //        };
-    //    }
-
-    //    public static PagedResponse<T> CreatePagedDestinationReponse<T>(IList<DestinationPreviewDto> dto,
-    //        IMapper mapper,
-    //        IPreviewQuery query,
-    //        string version) where T : class
-    //    {
-    //        return new PagedResponse<T>
-    //        {
-    //            Data = mapper.Map<IList<T>>(dto),
-    //            Pagination = new Pagination
-    //            {
-    //                TotalRecords = dto.Count,
-    //                PageCount = query.GetTotalPages(dto.Count),
-    //                PageNumber = query.PageNumber,
-    //                HasNext = query.HasNext(dto.Count),
-    //                HasPrevious = query.HasPrevious(),
-    //                PageSize = query.PageSize
-    //            },
-    //            Status = "success",
-    //            Version = version
-    //        };
-    //    }
-    //}
 }

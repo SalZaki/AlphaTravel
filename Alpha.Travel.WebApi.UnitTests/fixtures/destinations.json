@@ -7,7 +7,13 @@
       "modified_on": "0001-01-01T00:00:00Z",
       "modified_by": null,
       "created_on": "2019-04-10T11:31:56Z",
-      "created_by": "SeedDataService"
+      "created_by": "SeedDataService",
+      "average_rating": "0.00",
+      "reviews_allowed": true,
+      "status": "publish",
+      "featured": false,
+      "meta_data": [],
+      "_links": null
     },
     {
       "id": 2,
@@ -16,7 +22,13 @@
       "modified_on": "0001-01-01T00:00:00Z",
       "modified_by": null,
       "created_on": "2019-04-10T11:31:56Z",
-      "created_by": "SeedDataService"
+      "created_by": "SeedDataService",
+      "average_rating": "0.00",
+      "reviews_allowed": true,
+      "status": "publish",
+      "featured": false,
+      "meta_data": [],
+      "_links": null
     },
     {
       "id": 3,
@@ -25,7 +37,13 @@
       "modified_on": "0001-01-01T00:00:00Z",
       "modified_by": null,
       "created_on": "2019-04-10T11:31:56Z",
-      "created_by": "SeedDataService"
+      "created_by": "SeedDataService",
+      "average_rating": "0.00",
+      "reviews_allowed": true,
+      "status": "publish",
+      "featured": false,
+      "meta_data": [],
+      "_links": null
     },
     {
       "id": 4,
@@ -34,10 +52,15 @@
       "modified_on": "0001-01-01T00:00:00Z",
       "modified_by": null,
       "created_on": "2019-04-10T11:31:56Z",
-      "created_by": "SeedDataService"
+      "created_by": "SeedDataService",
+      "average_rating": "0.00",
+      "reviews_allowed": true,
+      "status": "publish",
+      "featured": false,
+      "meta_data": [],
+      "_links": null
     }
   ],
-  "meta_data": {},
   "pagination": {
     "total_records": 4,
     "page_count": 1,

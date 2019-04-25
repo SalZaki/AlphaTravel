@@ -4,7 +4,7 @@
     using System.Diagnostics.CodeAnalysis;
 
     [ExcludeFromCodeCoverage]
-    public abstract class BaseDto: IDto
+    public abstract class BaseDto
     {
         public int Id { get; set; }
 

@@ -12,7 +12,6 @@ namespace Alpha.Travel.WebApi.Host
     using Microsoft.EntityFrameworkCore;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc.Infrastructure;
-    using Microsoft.AspNetCore.Mvc.Routing;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.Extensions.Options;
     using Microsoft.AspNetCore.Mvc.ApiExplorer;
@@ -27,6 +26,7 @@ namespace Alpha.Travel.WebApi.Host
     using Application.Destinations.QueryHandlers;
     using Application.Destinations.Validators;
     using Application.Destinations.Queries;
+    using System.Diagnostics.CodeAnalysis;
 
     public class Startup
     {
@@ -93,36 +93,30 @@ namespace Alpha.Travel.WebApi.Host
 
             services.AddRouting(options => options.LowercaseUrls = true);
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-            services.AddScoped<IUrlHelper>(implementationFactory =>
-            {
-                var actionContext = implementationFactory.GetService<IActionContextAccessor>().ActionContext;
-                return new UrlHelper(actionContext);
-            });
-
             services.AddApiVersioning(options =>
             {
                 options.ReportApiVersions = true;
             });
-
             services.AddVersionedApiExplorer(options =>
             {
                 options.GroupNameFormat = "'v'VVV";
                 options.SubstituteApiVersionInUrl = true;
             });
 
+
+            services.AddSingleton<ILinkFactoryProvider, LinkFactoryProvider>();
+            services.AddSingleton<ILinkFactory, LinkFactory>();
             services.AddSingleton<IResponseFactory, ResponseFactory>();
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, SwaggerConfigureOptions>();
             services.AddTransient<IValidator<GetDestinationsPreviewQuery>, GetDestinationsPreviewQueryValidator>();
             services.AddTransient<IValidator<GetDestinationPreviewQuery>, GetDestinationPreviewQueryValidator>();
             services.AddTransient<IValidator<GetCustomersPreviewQuery>, GetCustomersPreviewQueryValidator>();
             services.AddTransient<IValidator<GetCustomerPreviewQuery>, GetCustomerPreviewQueryValidator>();
-
             services.AddSwaggerGen(options =>
             {
                 options.OperationFilter<SwaggerIOperationFilter>();
                 options.IncludeXmlComments(XmlCommentsFilePath);
             });
-
             //services.AddAuthentication(options =>
             //{
             //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -171,5 +165,11 @@ namespace Alpha.Travel.WebApi.Host
                 }
             });
         }
+    }
+
+    [ExcludeFromCodeCoverage]
+    public static class ServiceCollectionExtensions
+    {
+
     }
 }
